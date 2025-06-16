@@ -1,0 +1,68 @@
+spring:
+  redis:
+    host: localhost
+    port: 6379
+    database: 0
+    timeout: 10000
+    lettuce:
+      pool:
+        max-active: 8
+        max-wait: -1
+        max-idle: 8
+        min-idle: 0
+
+  cache:
+    type: redis
+    redis:
+      time-to-live: 1800000  # 30分钟
+      cache-null-values: false
+      use-key-prefix: true
+      key-prefix: "mall:"
+
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+    serialization:
+      write-dates-as-timestamps: false
+
+# 加密配置
+encryption:
+  key: ${ENCRYPTION_KEY:your-encryption-key-here}
+  salt: ${ENCRYPTION_SALT:your-encryption-salt-here}
+
+# 限流配置
+rate-limit:
+  enabled: true
+  default-limit: 20  # 默认每分钟请求数
+  admin-limit: 100   # 管理员每分钟请求数
+  api-limit: 50      # API调用每分钟请求数
+
+# 缓存配置
+cache:
+  product:
+    ttl: 3600        # 商品缓存1小时
+  statistics:
+    ttl: 300         # 统计缓存5分钟
+  review:
+    ttl: 600         # 评价缓存10分钟
+  hot-products:
+    ttl: 900         # 热门商品缓存15分钟
+  search:
+    ttl: 3600        # 搜索缓存1小时
+
+# 安全配置
+security:
+  sensitive-fields:
+    - phone
+    - email
+    - idcard
+    - bankcard
+    - address
+    - name
+  mask-patterns:
+    phone: "^(.{3})(.*)(.{4})$"
+    email: "^(.{1})(.*)(@.*)$"
+    idcard: "^(.{6})(.*)(.{4})$"
+    bankcard: "^(.{4})(.*)(.{4})$"
+    address: "^(.{4})(.*)(.{4})$"
+    name: "^(.{1})(.*)(.{1})$" 

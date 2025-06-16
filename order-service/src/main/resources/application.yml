@@ -1,0 +1,88 @@
+spring:
+  datasource:
+    hikari:
+      # 连接池配置
+      maximum-pool-size: 20
+      minimum-idle: 5
+      idle-timeout: 300000
+      connection-timeout: 20000
+      max-lifetime: 1200000
+      # 性能优化
+      auto-commit: true
+      connection-test-query: SELECT 1
+      validation-timeout: 5000
+      leak-detection-threshold: 60000
+  jpa:
+    properties:
+      hibernate:
+        # 二级缓存配置
+        cache:
+          use_second_level_cache: true
+          use_query_cache: true
+          region.factory_class: org.hibernate.cache.ehcache.EhCacheRegionFactory
+        # 性能优化
+        jdbc:
+          batch_size: 50
+          batch_versioned_data: true
+        order_inserts: true
+        order_updates: true
+        generate_statistics: true
+        # 连接池监控
+        connection.provider_disables_autocommit: true
+        # 查询优化
+        query:
+          in_clause_parameter_padding: true
+          fail_on_pagination_over_collection_fetch: true
+        # 会话管理
+        session:
+          events.log: true
+          events.log.LOG_QUERIES_SLOWER_THAN_MS: 1000
+    # 显示SQL
+    show-sql: false
+    # 格式化SQL
+    format-sql: true
+    # 自动更新表结构
+    hibernate:
+      ddl-auto: update
+    # 数据库方言
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+
+# Redis配置
+spring:
+  redis:
+    # 连接池配置
+    lettuce:
+      pool:
+        max-active: 8
+        max-idle: 8
+        min-idle: 0
+        max-wait: -1ms
+    # 连接超时
+    timeout: 5000ms
+    # 数据库索引
+    database: 0
+    # 集群配置（如果需要）
+    # cluster:
+    #   nodes:
+    #     - 127.0.0.1:6379
+    #     - 127.0.0.1:6380
+    #     - 127.0.0.1:6381
+    #   max-redirects: 3
+
+# 监控配置
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus,metrics
+  metrics:
+    export:
+      prometheus:
+        enabled: true
+    tags:
+      application: ${spring.application.name}
+  endpoint:
+    health:
+      show-details: always
+    prometheus:
+      enabled: true 
