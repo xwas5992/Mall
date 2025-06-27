@@ -1,0 +1,10 @@
+.product-actions .btn:hover {
+    opacity: 0.9;
+}
+
+/* Toast Notification Styles */
+#toast-container .toast {
+    background-color: rgba(0, 0, 0, 0.75);
+    color: white;
+    border-radius: 0.25rem;
+} 

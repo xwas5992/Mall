@@ -1,4 +1,4 @@
-
+package com.mall.authservice.security;
 
 import com.mall.authservice.repository.UserRepository;
 import lombok.RequiredArgsConstructor;

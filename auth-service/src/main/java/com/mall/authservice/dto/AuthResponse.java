@@ -1,4 +1,4 @@
-
+package com.mall.authservice.dto;
 
 import com.mall.authservice.model.User;
 import lombok.AllArgsConstructor;

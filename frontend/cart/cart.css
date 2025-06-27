@@ -1,0 +1,290 @@
+body {
+    background-color: #f5f5f5;
+}
+
+.cart-header {
+    border-bottom: 2px solid #ff6700;
+}
+
+.cart-header h2 {
+    font-size: 1.75rem;
+    color: #424242;
+}
+
+.cart-main-content {
+    padding: 40px 0;
+}
+
+#empty-cart-view {
+    background-color: #fff;
+    padding: 80px 0;
+}
+
+.empty-cart-icon {
+    font-size: 100px;
+    color: #e0e0e0;
+}
+
+#empty-cart-view h2 {
+    color: #424242;
+    font-size: 2rem;
+}
+
+#empty-cart-view .btn-primary {
+    background-color: #ff6700;
+    border-color: #ff6700;
+    padding: 10px 40px;
+    font-size: 1.1rem;
+}
+
+#empty-cart-view .btn-primary:hover {
+    background-color: #f25a00;
+    border-color: #f25a00;
+}
+
+.recommendations {
+    padding: 40px 0;
+}
+
+.recommendations h3 {
+    color: #757575;
+    position: relative;
+    display: inline-block;
+    padding-bottom: 10px;
+}
+
+.recommendations h3::after {
+    content: '';
+    position: absolute;
+    width: 60px;
+    height: 2px;
+    background-color: #e0e0e0;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.product-card {
+    background-color: #fff;
+    border: 1px solid #e0e0e0;
+    text-align: center;
+    padding: 20px;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.product-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.product-card img {
+    max-width: 160px;
+    margin-bottom: 15px;
+}
+
+.product-card .product-name {
+    font-size: 1rem;
+    color: #424242;
+}
+
+.product-card .product-price {
+    color: #ff6700;
+    font-size: 1.1rem;
+}
+
+/* Cart Items Table Styles */
+.cart-table-header, .cart-item-row {
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.cart-table-header {
+    color: #757575;
+    font-size: 0.9rem;
+}
+
+.cart-item-row {
+    padding: 20px 0;
+}
+
+.cart-item-row .product-info {
+    display: flex;
+    align-items: center;
+}
+
+.cart-item-row .product-info img {
+    width: 80px;
+    height: 80px;
+    margin-right: 15px;
+    border: 1px solid #e0e0e0;
+}
+
+.cart-item-row .quantity-selector {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #e0e0e0;
+}
+
+.quantity-selector .btn {
+    background: none;
+    border: none;
+    font-size: 1.2rem;
+    padding: 5px 15px;
+}
+
+.quantity-selector .quantity-input {
+    width: 50px;
+    text-align: center;
+    border: none;
+    border-left: 1px solid #e0e0e0;
+    border-right: 1px solid #e0e0e0;
+    padding: 5px 0;
+}
+
+.quantity-selector .quantity-input:focus {
+    outline: none;
+}
+
+.cart-item-row .item-subtotal {
+    color: #ff6700;
+    font-weight: bold;
+}
+
+.cart-item-row .delete-btn {
+    font-size: 1.2rem;
+    color: #757575;
+    cursor: pointer;
+    transition: all 0.2s;
+    padding: 8px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+}
+
+.cart-item-row .delete-btn:hover {
+    color: #fff;
+    background-color: #ff6700;
+    transform: scale(1.1);
+}
+
+.cart-item-row .delete-btn:active {
+    transform: scale(0.95);
+}
+
+/* Custom Checkbox */
+.form-check-input:checked {
+    background-color: #ff6700;
+    border-color: #ff6700;
+}
+
+/* Summary Bar */
+#cart-summary-bar {
+    z-index: 1020;
+}
+
+#checkout-btn {
+    background-color: #ff6700;
+    border-color: #ff6700;
+    padding: 10px 40px;
+}
+
+#checkout-btn:hover {
+    background-color: #f25a00;
+    border-color: #f25a00;
+}
+
+/* 自定义确认弹窗样式 */
+#confirmModal .modal-content {
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+
+#confirmModal .modal-header {
+    border-bottom: 1px solid #e0e0e0;
+    padding: 20px 25px 15px;
+}
+
+#confirmModal .modal-title {
+    color: #424242;
+    font-weight: 600;
+}
+
+#confirmModal .modal-body {
+    padding: 20px 25px;
+}
+
+#confirmModal .modal-body p {
+    margin-bottom: 10px;
+    color: #424242;
+}
+
+#confirmModal .modal-footer {
+    border-top: 1px solid #e0e0e0;
+    padding: 15px 25px 20px;
+}
+
+#confirmModal .btn {
+    padding: 8px 20px;
+    border-radius: 6px;
+    font-weight: 500;
+}
+
+#confirmModal .btn-danger {
+    background-color: #dc3545;
+    border-color: #dc3545;
+}
+
+#confirmModal .btn-danger:hover {
+    background-color: #c82333;
+    border-color: #bd2130;
+}
+
+#confirmModal .btn-secondary {
+    background-color: #6c757d;
+    border-color: #6c757d;
+}
+
+#confirmModal .btn-secondary:hover {
+    background-color: #5a6268;
+    border-color: #545b62;
+}
+
+/* 弹窗动画效果 */
+.modal.fade .modal-dialog {
+    transition: transform 0.3s ease-out;
+    transform: translate(0, -50px);
+}
+
+.modal.show .modal-dialog {
+    transform: none;
+}
+
+/* Toast通知样式 */
+.toast {
+    min-width: 300px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.toast .toast-body {
+    padding: 12px 16px;
+    font-weight: 500;
+}
+
+.toast .btn-close {
+    filter: brightness(0) invert(1);
+}
+
+/* 成功Toast */
+.toast.bg-success {
+    background-color: #28a745 !important;
+}
+
+/* 错误Toast */
+.toast.bg-danger {
+    background-color: #dc3545 !important;
+} 

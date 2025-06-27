@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>商城首页</title>
+    <link rel="stylesheet" href="../libs/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../libs/fontawesome/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Top Bar for Navigation and User Links -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
+        <div class="container">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#topNavbar" aria-controls="topNavbar" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="topNavbar">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">首页</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">所有商品</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">关于我们</a>
+                    </li>
+                </ul>
+                <div id="loginArea" class="ms-auto">
+                    <!-- 登录状态将通过JavaScript动态更新 -->
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Header for Logo and Search -->
+    <header class="bg-white py-3 shadow-sm">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-center">
+                <a class="navbar-brand" href="index.html">
+                    <img src="https://via.placeholder.com/150x50?text=Logo" alt="Logo" style="height: 50px;">
+                </a>
+                <div class="d-flex" style="width: 400px;">
+                    <input class="form-control me-2" type="search" id="searchInput" placeholder="搜索商品..." aria-label="Search">
+                    <button class="btn btn-outline-success" type="button" id="searchBtn">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Carousel -->
+    <div class="container my-4">
+        <div id="productCarousel" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-indicators">
+                <button type="button" data-bs-target="#productCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                <button type="button" data-bs-target="#productCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                <button type="button" data-bs-target="#productCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
+            </div>
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <img src="https://picsum.photos/1200/400?random=1" class="d-block w-100" alt="Slide 1" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTIwMCIgaGVpZ2h0PSI0MDAiIHZpZXdCb3g9IjAgMCAxMjAwIDQwMCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjEyMDAiIGhlaWdodD0iNDAwIiBmaWxsPSIjRkZDNzA3Ii8+Cjx0ZXh0IHg9IjYwMCIgeT0iMjAwIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iNDgiIGZpbGw9IiNGRkZGRkYiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGR5PSIuM2VtIj5TbGlkZSAxPC90ZXh0Pgo8L3N2Zz4K'">
+                </div>
+                <div class="carousel-item">
+                    <img src="https://picsum.photos/1200/400?random=2" class="d-block w-100" alt="Slide 2" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTIwMCIgaGVpZ2h0PSI0MDAiIHZpZXdCb3g9IjAgMCAxMjAwIDQwMCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjEyMDAiIGhlaWdodD0iNDAwIiBmaWxsPSIjMjhBNzQ1Ii8+Cjx0ZXh0IHg9IjYwMCIgeT0iMjAwIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iNDgiIGZpbGw9IiNGRkZGRkYiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGR5PSIuM2VtIj5TbGlkZSAyPC90ZXh0Pgo8L3N2Zz4K'">
+                </div>
+                <div class="carousel-item">
+                    <img src="https://picsum.photos/1200/400?random=3" class="d-block w-100" alt="Slide 3" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTIwMCIgaGVpZ2h0PSI0MDAiIHZpZXdCb3g9IjAgMCAxMjAwIDQwMCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjEyMDAiIGhlaWdodD0iNDAwIiBmaWxsPSIjMDA3QkZGIi8+Cjx0ZXh0IHg9IjYwMCIgeT0iMjAwIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iNDgiIGZpbGw9IiNGRkZGRkYiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGR5PSIuM2VtIj5TbGlkZSAzPC90ZXh0Pgo8L3N2Zz4K'">
+                </div>
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#productCarousel" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#productCarousel" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="container my-5">
+        <div id="category-sections">
+            <!-- Category sections will be injected here by JavaScript -->
+        </div>
+    </main>
+
+    <!-- Fixed Right Sidebar -->
+    <div class="fixed-sidebar">
+        <a href="../portal/portal.html" class="sidebar-item" title="个人中心">
+            <i class="fas fa-user"></i>
+            <span>个人中心</span>
+        </a>
+        <a href="../cart/cart.html" class="sidebar-item" title="购物车">
+            <i class="fas fa-shopping-cart"></i>
+            <span>购物车</span>
+        </a>
+        <a href="#" class="sidebar-item" title="联系客服">
+            <i class="fas fa-headset"></i>
+            <span>客服</span>
+        </a>
+        <a href="#" class="sidebar-item" id="back-to-top" title="回到顶部">
+            <i class="fas fa-arrow-up"></i>
+            <span>回顶部</span>
+        </a>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-light text-center text-lg-start mt-5">
+        <div class="container p-4">
+            <div class="row">
+                <div class="col-lg-6 col-md-12 mb-4 mb-md-0">
+                    <h5 class="text-uppercase">关于我们</h5>
+                    <p>
+                        我们是一家致力于提供优质商品的在线商城。
+                    </p>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
+                    <h5 class="text-uppercase">链接</h5>
+                    <ul class="list-unstyled mb-0">
+                        <li><a href="#" class="text-dark">常见问题</a></li>
+                        <li><a href="#" class="text-dark">联系我们</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
+                    <h5 class="text-uppercase">社交媒体</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="text-dark"><i class="fab fa-facebook-f"></i> Facebook</a></li>
+                        <li><a href="#" class="text-dark"><i class="fab fa-twitter"></i> Twitter</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
+            © 2024 Copyright:
+            <a class="text-dark" href="https://example.com/">Mall-Inc.com</a>
+        </div>
+    </footer>
+
+    <script src="../libs/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="../js/api-config.js"></script>
+    <script src="../js/auth.js"></script>
+    <script src="../js/cart-api.js"></script>
+    <script src="main.js"></script>
+    
+    <!-- 轮播图错误处理脚本 -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 确保轮播图正常工作
+            const carousel = document.getElementById('productCarousel');
+            if (carousel) {
+                try {
+                    // 初始化Bootstrap轮播组件
+                    const bsCarousel = new bootstrap.Carousel(carousel, {
+                        interval: 5000,
+                        wrap: true,
+                        keyboard: true,
+                        pause: 'hover'
+                    });
+                    
+                    // 添加错误处理
+                    carousel.addEventListener('error', function(e) {
+                        console.warn('轮播图加载错误:', e);
+                    });
+                    
+                    // 图片加载错误处理
+                    const carouselImages = carousel.querySelectorAll('img');
+                    carouselImages.forEach(function(img) {
+                        img.addEventListener('error', function() {
+                            console.warn('轮播图片加载失败:', this.src);
+                            // 使用备用图片
+                            this.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTIwMCIgaGVpZ2h0PSI0MDAiIHZpZXdCb3g9IjAgMCAxMjAwIDQwMCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjEyMDAiIGhlaWdodD0iNDAwIiBmaWxsPSIjRkZGRkZGIi8+Cjx0ZXh0IHg9IjYwMCIgeT0iMjAwIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iNDgiIGZpbGw9IiM2NjY2NjYiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGR5PSIuM2VtIj7lm77niYfliqDovb3lm77niYc8L3RleHQ+Cjwvc3ZnPgo=';
+                        });
+                    });
+                    
+                } catch (error) {
+                    console.error('轮播图初始化失败:', error);
+                }
+            }
+        });
+    </script>
+</body>
+</html> 

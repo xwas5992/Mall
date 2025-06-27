@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>用户登录 - 农产品商城</title>
+    <!-- Bootstrap CSS -->
+    <link href="../libs/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="../libs/fontawesome/all.min.css">
+    <!-- 自定义样式 -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-light">
+    <!-- 导航栏 -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center" href="../home/index.html">
+                <i class="fas fa-leaf text-success me-2"></i>
+                <span class="fw-bold">农产品商城</span>
+            </a>
+            <div class="navbar-nav ms-auto">
+                <a class="nav-link" href="../home/index.html">
+                    <i class="fas fa-home me-1"></i>返回首页
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 主要内容 -->
+    <div class="container-fluid">
+        <div class="row min-vh-100">
+            <!-- 左侧装饰区域 -->
+            <div class="col-lg-6 d-none d-lg-block bg-success position-relative overflow-hidden">
+                <div class="position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center">
+                    <div class="text-center text-white">
+                        <i class="fas fa-leaf display-1 mb-4 opacity-75"></i>
+                        <h2 class="display-6 fw-bold mb-3">欢迎来到农产品商城</h2>
+                        <p class="lead opacity-75">为您提供优质的农产品，让健康生活触手可及</p>
+                        <div class="row mt-5">
+                            <div class="col-4 text-center">
+                                <i class="fas fa-shipping-fast fa-2x mb-2"></i>
+                                <p>快速配送</p>
+                            </div>
+                            <div class="col-4 text-center">
+                                <i class="fas fa-shield-alt fa-2x mb-2"></i>
+                                <p>品质保证</p>
+                            </div>
+                            <div class="col-4 text-center">
+                                <i class="fas fa-heart fa-2x mb-2"></i>
+                                <p>贴心服务</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- 装饰性背景图案 -->
+                <div class="position-absolute top-0 start-0 w-100 h-100 opacity-10">
+                    <div class="position-absolute" style="top: 20%; left: 10%; transform: rotate(45deg);">
+                        <i class="fas fa-apple-alt fa-3x"></i>
+                    </div>
+                    <div class="position-absolute" style="top: 60%; right: 15%; transform: rotate(-30deg);">
+                        <i class="fas fa-carrot fa-3x"></i>
+                    </div>
+                    <div class="position-absolute" style="bottom: 30%; left: 20%; transform: rotate(15deg);">
+                        <i class="fas fa-seedling fa-3x"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 右侧登录区域 -->
+            <div class="col-lg-6 d-flex align-items-center justify-content-center p-5">
+                <div class="w-100" style="max-width: 400px;">
+                    <!-- Logo -->
+                    <div class="text-center mb-4">
+                        <i class="fas fa-leaf text-success fa-3x mb-3"></i>
+                        <h2 class="fw-bold" id="formTitle">用户登录</h2>
+                        <p class="text-muted">欢迎回来，请登录您的账户</p>
+                    </div>
+
+                    <!-- 错误提示 -->
+                    <div id="formError" class="alert alert-danger" style="display: none;"></div>
+
+                    <!-- 登录表单 -->
+                    <form id="loginForm" class="needs-validation" novalidate>
+                        <div class="mb-3">
+                            <label for="username" class="form-label">
+                                <i class="fas fa-user me-2"></i>用户名
+                            </label>
+                            <input type="text" class="form-control form-control-lg" id="username" name="username" required>
+                            <div class="invalid-feedback">
+                                请输入用户名
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="password" class="form-label">
+                                <i class="fas fa-lock me-2"></i>密码
+                            </label>
+                            <div class="input-group">
+                                <input type="password" class="form-control form-control-lg" id="password" name="password" required autocomplete="current-password">
+                                <button class="btn btn-outline-secondary" type="button" id="togglePassword">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                            </div>
+                            <div class="invalid-feedback">
+                                请输入密码
+                            </div>
+                        </div>
+
+                        <div class="mb-3 form-check">
+                            <input type="checkbox" class="form-check-input" id="rememberMe">
+                            <label class="form-check-label" for="rememberMe">
+                                记住我
+                            </label>
+                        </div>
+
+                        <button type="submit" class="btn btn-success btn-lg w-100 mb-3">
+                            <i class="fas fa-sign-in-alt me-2"></i>登录
+                        </button>
+
+                        <div class="text-center">
+                            <p class="mb-0">
+                                还没有账号？
+                                <a href="#" id="toRegister" class="text-success text-decoration-none fw-bold">
+                                    立即注册
+                                </a>
+                            </p>
+                        </div>
+                    </form>
+
+                    <!-- 注册表单 -->
+                    <form id="registerForm" class="needs-validation" style="display: none;" novalidate>
+                        <div class="mb-3">
+                            <label for="regPhone" class="form-label">
+                                <i class="fas fa-mobile-alt me-2"></i>手机号码
+                            </label>
+                            <input type="tel" class="form-control form-control-lg" id="regPhone" name="regPhone" required>
+                            <div class="invalid-feedback">
+                                请输入有效的手机号码
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="regCode" class="form-label">
+                                <i class="fas fa-key me-2"></i>验证码
+                            </label>
+                            <div class="input-group">
+                                <input type="text" class="form-control form-control-lg" id="regCode" name="regCode" required>
+                                <button class="btn btn-outline-success" type="button" id="getCodeBtn">
+                                    获取验证码
+                                </button>
+                            </div>
+                            <div class="invalid-feedback">
+                                请输入验证码
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="regPassword" class="form-label">
+                                <i class="fas fa-lock me-2"></i>设置密码
+                            </label>
+                            <div class="input-group">
+                                <input type="password" class="form-control form-control-lg" id="regPassword" name="regPassword" required autocomplete="new-password">
+                                <button class="btn btn-outline-secondary" type="button" id="toggleRegPassword">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                            </div>
+                            <div class="invalid-feedback">
+                                密码不能少于6位
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="regConfirm" class="form-label">
+                                <i class="fas fa-lock me-2"></i>确认密码
+                            </label>
+                            <div class="input-group">
+                                <input type="password" class="form-control form-control-lg" id="regConfirm" name="regConfirm" required autocomplete="new-password">
+                                <button class="btn btn-outline-secondary" type="button" id="toggleRegConfirm">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                            </div>
+                            <div class="invalid-feedback">
+                                两次输入的密码不一致
+                            </div>
+                        </div>
+
+                        <div class="mb-3 form-check">
+                            <input type="checkbox" class="form-check-input" id="agreeTerms" required>
+                            <label class="form-check-label" for="agreeTerms">
+                                我已阅读并同意
+                                <a href="#" class="text-success text-decoration-none">用户协议</a>
+                                和
+                                <a href="#" class="text-success text-decoration-none">隐私政策</a>
+                            </label>
+                            <div class="invalid-feedback">
+                                请同意用户协议和隐私政策
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-success btn-lg w-100 mb-3">
+                            <i class="fas fa-user-plus me-2"></i>注册
+                        </button>
+
+                        <div class="text-center">
+                            <p class="mb-0">
+                                已有账号？
+                                <a href="#" id="toLogin" class="text-success text-decoration-none fw-bold">
+                                    立即登录
+                                </a>
+                            </p>
+                        </div>
+                    </form>
+
+                    <!-- 社交登录 -->
+                    <div class="mt-4">
+                        <div class="text-center mb-3">
+                            <span class="text-muted">或使用以下方式登录</span>
+                        </div>
+                        <div class="row g-2">
+                            <div class="col-6">
+                                <button class="btn btn-outline-primary w-100">
+                                    <i class="fab fa-weixin me-2"></i>微信登录
+                                </button>
+                            </div>
+                            <div class="col-6">
+                                <button class="btn btn-outline-danger w-100">
+                                    <i class="fab fa-qq me-2"></i>QQ登录
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="../libs/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <!-- API配置 -->
+    <script src="../js/api-config.js"></script>
+    <!-- 自定义JS -->
+    <script src="login.js"></script>
+</body>
+</html> 

@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我的购物车 - 商城</title>
+    <link rel="stylesheet" href="../libs/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../libs/fontawesome/all.min.css">
+    <link rel="stylesheet" href="cart.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="cart-header bg-white">
+        <div class="container d-flex justify-content-between align-items-center py-3">
+            <a class="navbar-brand d-flex align-items-center" href="../home/index.html">
+                <div class="me-3" style="width: 40px; height: 40px; background: #ff6700; color: white; display: flex; align-items: center; justify-content: center; border-radius: 4px; font-weight: bold;">M</div>
+                <h2 class="mb-0">我的购物车</h2>
+            </a>
+            <div class="d-flex align-items-center" id="user-actions">
+                <!-- User menu will be inserted here by JS -->
+                <a href="../portal/portal.html" class="nav-link ms-3">我的订单</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="cart-main-content">
+        <div class="container">
+            <!-- Empty Cart View (Initially Visible) -->
+            <div id="empty-cart-view" class="text-center py-5">
+                <div class="empty-cart-icon mb-4">
+                    <i class="fas fa-shopping-cart"></i>
+                </div>
+                <h2>您的购物车还是空的！</h2>
+                <p class="text-muted mb-4">快去挑选一些商品吧。</p>
+                <a href="../home/index.html" class="btn btn-primary btn-lg">马上去购物</a>
+            </div>
+            
+            <!-- Cart Items View (Initially Hidden) -->
+            <div id="cart-items-view" class="bg-white" style="display: none;">
+                <!-- Cart Header -->
+                <div class="cart-table-header d-flex align-items-center p-3">
+                    <div class="form-check flex-shrink-0">
+                        <input class="form-check-input" type="checkbox" id="select-all-checkbox">
+                        <label class="form-check-label" for="select-all-checkbox">全选</label>
+                    </div>
+                    <div class="col text-center">商品名称</div>
+                    <div class="col-2 text-center">单价</div>
+                    <div class="col-2 text-center">数量</div>
+                    <div class="col-1 text-center">小计</div>
+                    <div class="col-1 text-center">操作</div>
+                </div>
+                <!-- Cart Body -->
+                <div id="cart-items-container">
+                    <!-- Cart items will be rendered here by JS -->
+                </div>
+            </div>
+
+            <!-- Sticky Summary Bar -->
+            <div id="cart-summary-bar" class="sticky-bottom bg-white shadow-lg p-3" style="display: none;">
+                <div class="container d-flex justify-content-between align-items-center">
+                    <div>
+                        <a href="../home/index.html" class="text-decoration-none text-secondary">继续购物</a>
+                        <span class="ms-4">已选择 <strong id="selected-count" class="text-primary">0</strong> 件</span>
+                    </div>
+                    <div class="d-flex align-items-center">
+                        <span class="me-3">合计：<strong id="total-price" class="text-primary fs-4">0.00元</strong></span>
+                        <button class="btn btn-primary btn-lg" id="checkout-btn">去结算</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recommendations -->
+            <div class="recommendations mt-5">
+                <h3 class="text-center mb-4">为你推荐</h3>
+                <div id="recommendations-list" class="row">
+                    <!-- Recommended products will be rendered here by JS -->
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- 自定义确认弹窗 -->
+    <div id="confirmModal" class="modal fade" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="confirmModalLabel">
+                        <i class="fas fa-exclamation-triangle text-warning me-2"></i>
+                        确认删除
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>确定要删除商品 <strong id="deleteProductName"></strong> 吗？</p>
+                    <p class="text-muted small mb-0">此操作不可撤销。</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-danger" id="confirmDeleteBtn">
+                        <i class="fas fa-trash me-1"></i>
+                        确认删除
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../libs/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="../js/auth.js"></script>
+    <script src="../js/cart-api.js"></script>
+    <script src="../js/cart-manager.js"></script>
+    <script src="cart.js"></script>
+</body>
+</html> 

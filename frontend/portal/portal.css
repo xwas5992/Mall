@@ -1,0 +1,79 @@
+body {
+    background-color: #f5f5f5;
+}
+
+.portal-menu .list-group-header {
+    padding: 1rem 1.25rem 0.5rem;
+    font-size: 1rem;
+    font-weight: bold;
+    color: #333;
+    background-color: transparent;
+    border: none;
+}
+
+.portal-menu .list-group-item {
+    border: none;
+    padding: 0.5rem 1.25rem;
+    color: #757575;
+}
+
+.portal-menu .list-group-item.active,
+.portal-menu .list-group-item:hover {
+    background-color: transparent;
+    color: #ff6700;
+    font-weight: bold;
+}
+
+.portal-menu hr {
+    display: none;
+}
+
+.card {
+    background-color: #fff;
+}
+
+.user-info-header .user-details h4 {
+    font-size: 1.5rem;
+    color: #333;
+}
+
+.user-info-header .security-info p {
+    font-size: 0.9rem;
+    color: #757575;
+}
+
+.quick-stats .stat-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.quick-stats .stat-icon {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+.quick-stats .stat-title {
+    color: #757575;
+}
+
+.quick-stats .stat-link {
+    color: #b0b0b0;
+    text-decoration: none;
+    font-size: 0.85rem;
+}
+.quick-stats .stat-link:hover {
+    color: #ff6700;
+}
+
+.bg-orange { background-color: #ff6700; }
+.bg-green { background-color: #83c44e; }
+.bg-blue { background-color: #58a9e5; }
+.bg-yellow { background-color: #f7a600; } 

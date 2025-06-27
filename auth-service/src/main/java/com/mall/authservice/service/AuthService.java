@@ -1,4 +1,4 @@
-
+package com.mall.authservice.service;
 
 import com.mall.authservice.dto.AuthResponse;
 import com.mall.authservice.dto.LoginRequest;
@@ -7,6 +7,8 @@ import com.mall.authservice.model.User;
 import com.mall.authservice.repository.UserRepository;
 import com.mall.authservice.security.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -58,5 +60,36 @@ public class AuthService {
 
         String token = jwtTokenProvider.generateToken(authentication);
         return new AuthResponse(token, "Bearer", AuthResponse.UserInfo.fromUser(user));
+    }
+
+    public User findByUsername(String username) {
+        return userRepository.findByUsername(username)
+            .orElseThrow(() -> new RuntimeException("User not found"));
+    }
+
+    public Page<User> getAllUsers(Pageable pageable) {
+        return userRepository.findAll(pageable);
+    }
+
+    public long getUserCount() {
+        return userRepository.count();
+    }
+
+    public User getUserById(Long id) {
+        return userRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("User not found"));
+    }
+
+    @Transactional
+    public User updateUserStatus(Long id, boolean enabled) {
+        User user = getUserById(id);
+        user.setEnabled(enabled);
+        return userRepository.save(user);
+    }
+
+    @Transactional
+    public void deleteUser(Long id) {
+        User user = getUserById(id);
+        userRepository.delete(user);
     }
 } 

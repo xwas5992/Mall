@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>API连接测试 - 农产品商城</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: 'Microsoft YaHei', Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .test-section {
+            margin-bottom: 30px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .test-section h3 {
+            margin-top: 0;
+            color: #333;
+        }
+        button {
+            background: #e74c3c;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #c0392b;
+        }
+        .result {
+            margin-top: 15px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 4px;
+            border-left: 4px solid #e74c3c;
+            white-space: pre-wrap;
+            font-family: monospace;
+            font-size: 12px;
+        }
+        .success {
+            border-left-color: #28a745;
+            background: #d4edda;
+        }
+        .error {
+            border-left-color: #dc3545;
+            background: #f8d7da;
+        }
+        .loading {
+            color: #666;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>API连接测试</h1>
+        <p>此页面用于测试前端与后端API的连接是否正常。</p>
+
+        <div class="test-section">
+            <h3>1. 测试分类API</h3>
+            <button onclick="testCategories()">获取分类列表</button>
+            <div id="categoriesResult" class="result" style="display: none;"></div>
+        </div>
+
+        <div class="test-section">
+            <h3>2. 测试商品搜索API</h3>
+            <button onclick="testProductSearch()">搜索商品</button>
+            <div id="searchResult" class="result" style="display: none;"></div>
+        </div>
+
+        <div class="test-section">
+            <h3>3. 测试商品列表API</h3>
+            <button onclick="testProductList()">获取商品列表</button>
+            <div id="productListResult" class="result" style="display: none;"></div>
+        </div>
+
+        <div class="test-section">
+            <h3>4. 测试搜索建议API</h3>
+            <button onclick="testSearchSuggestions()">获取搜索建议</button>
+            <div id="suggestionsResult" class="result" style="display: none;"></div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE_URL = 'http://localhost:8081/product-service';
+
+        function showResult(elementId, content, isSuccess = true) {
+            const element = document.getElementById(elementId);
+            element.textContent = content;
+            element.className = `result ${isSuccess ? 'success' : 'error'}`;
+            element.style.display = 'block';
+        }
+
+        function showLoading(elementId) {
+            const element = document.getElementById(elementId);
+            element.textContent = '正在加载...';
+            element.className = 'result loading';
+            element.style.display = 'block';
+        }
+
+        async function testCategories() {
+            showLoading('categoriesResult');
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/v1/categories`);
+                const data = await response.json();
+                showResult('categoriesResult', JSON.stringify(data, null, 2), response.ok);
+            } catch (error) {
+                showResult('categoriesResult', `错误: ${error.message}`, false);
+            }
+        }
+
+        async function testProductSearch() {
+            showLoading('searchResult');
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/v1/search?keyword=苹果&page=0&size=5`);
+                const data = await response.json();
+                showResult('searchResult', JSON.stringify(data, null, 2), response.ok);
+            } catch (error) {
+                showResult('searchResult', `错误: ${error.message}`, false);
+            }
+        }
+
+        async function testProductList() {
+            showLoading('productListResult');
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/products?page=0&size=5`);
+                const data = await response.json();
+                showResult('productListResult', JSON.stringify(data, null, 2), response.ok);
+            } catch (error) {
+                showResult('productListResult', `错误: ${error.message}`, false);
+            }
+        }
+
+        async function testSearchSuggestions() {
+            showLoading('suggestionsResult');
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/v1/search/suggestions?keyword=苹果`);
+                const data = await response.json();
+                showResult('suggestionsResult', JSON.stringify(data, null, 2), response.ok);
+            } catch (error) {
+                showResult('suggestionsResult', `错误: ${error.message}`, false);
+            }
+        }
+    </script>
+</body>
+</html> 

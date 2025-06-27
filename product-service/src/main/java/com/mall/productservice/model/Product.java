@@ -1,9 +1,6 @@
-
+package com.mall.productservice.model;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -13,45 +10,58 @@ import java.time.LocalDateTime;
 
 @Data
 @Entity
-@Table(name = "products")
+@Table(name = "product")
 public class Product {
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @NotBlank(message = "商品名称不能为空")
-    @Column(nullable = false)
+    
+    @Column(nullable = false, length = 200)
     private String name;
-
-    @NotBlank(message = "商品描述不能为空")
+    
     @Column(length = 1000)
     private String description;
-
-    @NotNull(message = "商品价格不能为空")
-    @Min(value = 0, message = "商品价格必须大于等于0")
+    
     @Column(nullable = false, precision = 10, scale = 2)
     private BigDecimal price;
-
-    @NotNull(message = "商品库存不能为空")
-    @Min(value = 0, message = "商品库存必须大于等于0")
+    
     @Column(nullable = false)
     private Integer stock;
-
-    @NotBlank(message = "商品图片不能为空")
-    @Column(nullable = false)
-    private String imageUrl;
-
-    @Column(nullable = false)
+    
+    @Column(length = 100)
+    private String brand;
+    
+    @Column(length = 100)
     private String category;
-
+    
+    @Column(length = 500)
+    private String imageUrl;
+    
     @Column(nullable = false)
-    private Boolean status = true;  // true: 上架, false: 下架
-
+    private Boolean status = true; // true: 上架, false: 下架
+    
+    @Column(name = "category_id")
+    private Integer categoryId;
+    
+    // 首页展示相关字段
+    @Column(name = "featured_on_homepage", nullable = false)
+    private Boolean featuredOnHomepage = false; // 是否在首页展示
+    
+    @Column(name = "homepage_sort_order")
+    private Integer homepageSortOrder = 0; // 首页排序顺序，数字越小越靠前
+    
+    @Column(name = "homepage_display_title", length = 100)
+    private String homepageDisplayTitle; // 首页显示标题（可选，为空则使用商品名称）
+    
+    @Column(name = "homepage_display_description", length = 200)
+    private String homepageDisplayDescription; // 首页显示描述（可选，为空则使用商品描述）
+    
     @CreationTimestamp
-    @Column(nullable = false, updatable = false)
-    private LocalDateTime createTime;
-
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private LocalDateTime createdAt;
+    
     @UpdateTimestamp
-    @Column(nullable = false)
-    private LocalDateTime updateTime;
+    @Column(name = "updated_at", nullable = false)
+    private LocalDateTime updatedAt;
 } 

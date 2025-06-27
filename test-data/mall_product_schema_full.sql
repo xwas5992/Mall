@@ -1,0 +1,60 @@
+-- mall_product 数据库表结构
+-- 基于用户提供的截图
+
+-- 创建数据库
+CREATE DATABASE IF NOT EXISTS mall_product CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+
+-- 使用数据库
+USE mall_product;
+
+-- 创建商品分类表
+CREATE TABLE IF NOT EXISTS product_category (
+    id BIGINT NOT NULL AUTO_INCREMENT COMMENT '分类ID',
+    parent_id BIGINT NOT NULL DEFAULT 0 COMMENT '父分类ID',
+    name VARCHAR(64) NOT NULL COMMENT '分类名称',
+    level INT NOT NULL COMMENT '层级',
+    icon VARCHAR(255) DEFAULT NULL COMMENT '图标',
+    image VARCHAR(255) DEFAULT NULL COMMENT '图片',
+    sort INT NOT NULL DEFAULT 0 COMMENT '排序',
+    status TINYINT NOT NULL DEFAULT 1 COMMENT '状态：0-禁用，1-启用',
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+    PRIMARY KEY (id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='商品分类表';
+
+-- 创建商品品牌表
+CREATE TABLE IF NOT EXISTS product_brand (
+    id BIGINT NOT NULL AUTO_INCREMENT COMMENT '品牌ID',
+    name VARCHAR(64) NOT NULL COMMENT '品牌名称',
+    logo VARCHAR(255) DEFAULT NULL COMMENT '品牌logo',
+    description VARCHAR(255) DEFAULT NULL COMMENT '品牌描述',
+    sort INT NOT NULL DEFAULT 0 COMMENT '排序',
+    status TINYINT NOT NULL DEFAULT 1 COMMENT '状态：0-禁用，1-启用',
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+    PRIMARY KEY (id),
+    UNIQUE KEY uk_name (name)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='商品品牌表';
+
+-- 创建商品表
+CREATE TABLE IF NOT EXISTS product (
+    id BIGINT NOT NULL AUTO_INCREMENT COMMENT '商品ID',
+    name VARCHAR(128) NOT NULL COMMENT '商品名称',
+    category_id BIGINT NOT NULL COMMENT '分类ID',
+    brand_id BIGINT DEFAULT NULL COMMENT '品牌ID',
+    price DECIMAL(10,2) NOT NULL COMMENT '销售价',
+    original_price DECIMAL(10,2) NOT NULL COMMENT '原价',
+    description TEXT COMMENT '商品描述',
+    detail TEXT COMMENT '商品详情',
+    main_image VARCHAR(255) NOT NULL COMMENT '主图',
+    sales INT NOT NULL DEFAULT 0 COMMENT '销量',
+    stock INT NOT NULL DEFAULT 0 COMMENT '库存',
+    status TINYINT NOT NULL DEFAULT 1 COMMENT '状态：0-下架，1-上架',
+    sort INT NOT NULL DEFAULT 0 COMMENT '排序',
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+    PRIMARY KEY (id),
+    KEY idx_category_id (category_id),
+    KEY idx_brand_id (brand_id),
+    KEY idx_status (status)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='商品表'; 

@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>商品搜索 - 农产品商城</title>
+    <!-- Bootstrap CSS -->
+    <link href="../libs/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="../libs/fontawesome/all.min.css">
+    <!-- 自定义样式 -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-light">
+    <!-- 导航栏 -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top">
+        <div class="container">
+            <!-- Logo -->
+            <a class="navbar-brand d-flex align-items-center" href="../home/index.html">
+                <i class="fas fa-leaf text-success me-2"></i>
+                <span class="fw-bold">农产品商城</span>
+            </a>
+
+            <!-- Right-aligned items -->
+            <div class="d-flex align-items-center ms-auto">
+                <!-- 搜索框 -->
+                <div class="input-group me-3" style="width: 300px;">
+                    <input type="text" class="form-control" id="searchInput" placeholder="搜索商品名称、分类或品牌...">
+                    <button class="btn btn-success" type="button" id="searchBtn">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+    
+                <!-- 用户登录区域 -->
+                <div class="dropdown" id="loginArea">
+                    <!-- 动态生成登录按钮 -->
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 面包屑导航 -->
+    <div class="container mt-3">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="../home/index.html" class="text-decoration-none">
+                        <i class="fas fa-home me-1"></i>首页
+                    </a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">商品搜索</li>
+            </ol>
+        </nav>
+    </div>
+
+    <!-- 主要内容 -->
+    <div class="container">
+        <div class="row">
+            <!-- 左侧筛选栏 -->
+            <div class="col-lg-3">
+                <div class="card shadow-sm mb-4">
+                    <div class="card-header bg-success text-white">
+                        <h5 class="mb-0">
+                            <i class="fas fa-filter me-2"></i>筛选条件
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <!-- 分类筛选 -->
+                        <div class="mb-4">
+                            <h6 class="fw-bold mb-3">
+                                <i class="fas fa-tags me-2"></i>商品分类
+                            </h6>
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="radio" name="category" id="category-all" value="" checked>
+                                <label class="form-check-label" for="category-all">
+                                    全部分类
+                                </label>
+                            </div>
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="radio" name="category" id="category-1" value="1">
+                                <label class="form-check-label" for="category-1">
+                                    <i class="fas fa-apple-alt me-1"></i>新鲜水果
+                                </label>
+                            </div>
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="radio" name="category" id="category-2" value="2">
+                                <label class="form-check-label" for="category-2">
+                                    <i class="fas fa-carrot me-1"></i>有机蔬菜
+                                </label>
+                            </div>
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="radio" name="category" id="category-3" value="3">
+                                <label class="form-check-label" for="category-3">
+                                    <i class="fas fa-seedling me-1"></i>粮油调味
+                                </label>
+                            </div>
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="radio" name="category" id="category-4" value="4">
+                                <label class="form-check-label" for="category-4">
+                                    <i class="fas fa-egg me-1"></i>肉禽蛋奶
+                                </label>
+                            </div>
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="radio" name="category" id="category-5" value="5">
+                                <label class="form-check-label" for="category-5">
+                                    <i class="fas fa-fish me-1"></i>水产海鲜
+                                </label>
+                            </div>
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="radio" name="category" id="category-6" value="6">
+                                <label class="form-check-label" for="category-6">
+                                    <i class="fas fa-cookie-bite me-1"></i>休闲零食
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- 价格筛选 -->
+                        <div class="mb-4">
+                            <h6 class="fw-bold mb-3">
+                                <i class="fas fa-dollar-sign me-2"></i>价格区间
+                            </h6>
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="radio" name="price" id="price-all" value="" checked>
+                                <label class="form-check-label" for="price-all">全部价格</label>
+                            </div>
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="radio" name="price" id="price-0-20" value="0-20">
+                                <label class="form-check-label" for="price-0-20">¥0 - ¥20</label>
+                            </div>
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="radio" name="price" id="price-20-50" value="20-50">
+                                <label class="form-check-label" for="price-20-50">¥20 - ¥50</label>
+                            </div>
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="radio" name="price" id="price-50-100" value="50-100">
+                                <label class="form-check-label" for="price-50-100">¥50 - ¥100</label>
+                            </div>
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="radio" name="price" id="price-100" value="100+">
+                                <label class="form-check-label" for="price-100">¥100以上</label>
+                            </div>
+                        </div>
+
+                        <!-- 排序方式 -->
+                        <div class="mb-4">
+                            <h6 class="fw-bold mb-3">
+                                <i class="fas fa-sort me-2"></i>排序方式
+                            </h6>
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="radio" name="sort" id="sort-default" value="default" checked>
+                                <label class="form-check-label" for="sort-default">默认排序</label>
+                            </div>
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="radio" name="sort" id="sort-price-asc" value="price-asc">
+                                <label class="form-check-label" for="sort-price-asc">价格从低到高</label>
+                            </div>
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="radio" name="sort" id="sort-price-desc" value="price-desc">
+                                <label class="form-check-label" for="sort-price-desc">价格从高到低</label>
+                            </div>
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="radio" name="sort" id="sort-sales" value="sales">
+                                <label class="form-check-label" for="sort-sales">销量优先</label>
+                            </div>
+                        </div>
+
+                        <!-- 筛选按钮 -->
+                        <button class="btn btn-success w-100" id="applyFilters">
+                            <i class="fas fa-search me-2"></i>应用筛选
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 右侧商品展示区 -->
+            <div class="col-lg-9">
+                <!-- 搜索结果头部 -->
+                <div class="card shadow-sm mb-4">
+                    <div class="card-body">
+                        <div class="row align-items-center">
+                            <div class="col-md-6">
+                                <h5 class="mb-0">
+                                    <i class="fas fa-search me-2"></i>
+                                    <span id="searchTitle">搜索结果</span>
+                                    <span class="badge bg-success ms-2" id="resultCount">0</span>
+                                </h5>
+                            </div>
+                            <div class="col-md-6 text-md-end">
+                                <div class="btn-group" role="group">
+                                    <button type="button" class="btn btn-outline-success active" id="viewGrid">
+                                        <i class="fas fa-th"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-outline-success" id="viewList">
+                                        <i class="fas fa-list"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 商品列表 -->
+                <div id="productList" class="row g-4">
+                    <!-- 动态生成商品卡片 -->
+                </div>
+
+                <!-- 分页 -->
+                <div id="pagination" class="mt-4">
+                    <!-- 动态生成分页 -->
+                </div>
+
+                <!-- 加载更多 -->
+                <div class="text-center mt-4 mb-4" id="loadMoreContainer" style="display: none;">
+                    <button class="btn btn-outline-success" id="loadMoreBtn">
+                        <i class="fas fa-spinner me-2"></i>加载更多
+                    </button>
+                </div>
+
+                <!-- 无结果提示 -->
+                <div id="noResults" class="text-center py-5" style="display: none;">
+                    <i class="fas fa-search fa-3x text-muted mb-3"></i>
+                    <h5 class="text-muted">未找到相关商品</h5>
+                    <p class="text-muted">请尝试其他关键词或调整筛选条件</p>
+                    <a href="../home/index.html" class="btn btn-success">
+                        <i class="fas fa-home me-2"></i>返回首页
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 回到顶部按钮 -->
+    <button class="btn btn-success position-fixed bottom-0 end-0 m-4" id="backToTop" style="display: none;">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <!-- Bootstrap JS -->
+    <script src="../libs/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="../js/api-config.js"></script>
+    <script src="../js/auth.js"></script>
+    <script src="../js/cart-api.js"></script>
+    <script src="search.js"></script>
+</body>
+</html> 

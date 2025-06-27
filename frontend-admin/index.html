@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>商城管理系统 - 管理员控制台</title>
+    <link href="../frontend/libs/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../frontend/libs/fontawesome/all.min.css" rel="stylesheet">
+    <link href="css/admin.css" rel="stylesheet">
+</head>
+<body>
+    <div class="admin-container">
+        <!-- 侧边栏 -->
+        <nav class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <h3><i class="fas fa-shopping-cart"></i> 商城管理</h3>
+            </div>
+            <ul class="sidebar-nav">
+                <li class="nav-item active">
+                    <a href="#dashboard" class="nav-link" data-page="dashboard">
+                        <i class="fas fa-tachometer-alt"></i>
+                        <span>控制台</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#products" class="nav-link" data-page="products">
+                        <i class="fas fa-box"></i>
+                        <span>商品管理</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#homepage-products" class="nav-link" data-page="homepage-products">
+                        <i class="fas fa-home"></i>
+                        <span>首页商品</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#users" class="nav-link" data-page="users">
+                        <i class="fas fa-users"></i>
+                        <span>用户管理</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#orders" class="nav-link" data-page="orders">
+                        <i class="fas fa-shopping-bag"></i>
+                        <span>订单管理</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#categories" class="nav-link" data-page="categories">
+                        <i class="fas fa-tags"></i>
+                        <span>分类管理</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#reports" class="nav-link" data-page="reports">
+                        <i class="fas fa-chart-bar"></i>
+                        <span>统计报表</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#settings" class="nav-link" data-page="settings">
+                        <i class="fas fa-cog"></i>
+                        <span>系统设置</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+
+        <!-- 主内容区域 -->
+        <div class="main-content">
+            <!-- 顶部工具栏 -->
+            <header class="top-bar">
+                <div class="top-bar-left">
+                    <button class="btn btn-link sidebar-toggle" id="sidebarToggle">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <h4 id="pageTitle">控制台</h4>
+                </div>
+                <div class="top-bar-right">
+                    <div class="dropdown">
+                        <button class="btn btn-link dropdown-toggle" type="button" id="userDropdown" data-bs-toggle="dropdown">
+                            <i class="fas fa-user-circle"></i>
+                            <span id="adminName">管理员</span>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#profile"><i class="fas fa-user"></i> 个人资料</a></li>
+                            <li><a class="dropdown-item" href="#settings"><i class="fas fa-cog"></i> 设置</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="#" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> 退出登录</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </header>
+
+            <!-- 页面内容区域 -->
+            <main class="content-area">
+                <!-- 控制台页面 -->
+                <div id="dashboard" class="page-content active">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="stat-card">
+                                <div class="stat-icon bg-primary">
+                                    <i class="fas fa-users"></i>
+                                </div>
+                                <div class="stat-info">
+                                    <h3 id="totalUsers">0</h3>
+                                    <p>总用户数</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="stat-card">
+                                <div class="stat-icon bg-success">
+                                    <i class="fas fa-box"></i>
+                                </div>
+                                <div class="stat-info">
+                                    <h3 id="totalProducts">0</h3>
+                                    <p>商品总数</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="stat-card">
+                                <div class="stat-icon bg-warning">
+                                    <i class="fas fa-shopping-bag"></i>
+                                </div>
+                                <div class="stat-info">
+                                    <h3 id="totalOrders">0</h3>
+                                    <p>订单总数</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="stat-card">
+                                <div class="stat-icon bg-info">
+                                    <i class="fas fa-dollar-sign"></i>
+                                </div>
+                                <div class="stat-info">
+                                    <h3 id="totalRevenue">¥0</h3>
+                                    <p>总收入</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row mt-4">
+                        <div class="col-md-8">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5>最近订单</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        <table class="table table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th>订单号</th>
+                                                    <th>用户</th>
+                                                    <th>金额</th>
+                                                    <th>状态</th>
+                                                    <th>时间</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="recentOrdersTable">
+                                                <tr>
+                                                    <td colspan="5" class="text-center">暂无数据</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5>系统状态</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="system-status">
+                                        <div class="status-item">
+                                            <span class="status-label">认证服务</span>
+                                            <span class="status-value" id="authStatus">正常</span>
+                                        </div>
+                                        <div class="status-item">
+                                            <span class="status-label">商品服务</span>
+                                            <span class="status-value" id="productStatus">正常</span>
+                                        </div>
+                                        <div class="status-item">
+                                            <span class="status-label">用户服务</span>
+                                            <span class="status-value" id="userStatus">正常</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 商品管理页面 -->
+                <div id="products" class="page-content">
+                    <div class="page-header">
+                        <h2>商品管理</h2>
+                        <button class="btn btn-primary" id="addProductBtn">
+                            <i class="fas fa-plus"></i> 添加商品
+                        </button>
+                    </div>
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-hover" id="productsTable">
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>图片</th>
+                                            <th>名称</th>
+                                            <th>价格</th>
+                                            <th>库存</th>
+                                            <th>分类</th>
+                                            <th>状态</th>
+                                            <th>操作</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td colspan="8" class="text-center">加载中...</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 用户管理页面 -->
+                <div id="users" class="page-content">
+                    <div class="page-header">
+                        <h2>用户管理</h2>
+                    </div>
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-hover" id="usersTable">
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>用户名</th>
+                                            <th>邮箱</th>
+                                            <th>角色</th>
+                                            <th>注册时间</th>
+                                            <th>状态</th>
+                                            <th>操作</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td colspan="7" class="text-center">加载中...</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 订单管理页面 -->
+                <div id="orders" class="page-content">
+                    <div class="page-header">
+                        <h2>订单管理</h2>
+                    </div>
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-hover" id="ordersTable">
+                                    <thead>
+                                        <tr>
+                                            <th>订单号</th>
+                                            <th>用户</th>
+                                            <th>商品</th>
+                                            <th>金额</th>
+                                            <th>状态</th>
+                                            <th>创建时间</th>
+                                            <th>操作</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td colspan="7" class="text-center">加载中...</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 分类管理页面 -->
+                <div id="categories" class="page-content">
+                    <div class="page-header">
+                        <h2>分类管理</h2>
+                        <button class="btn btn-primary" id="addCategoryBtn">
+                            <i class="fas fa-plus"></i> 添加分类
+                        </button>
+                    </div>
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-hover" id="categoriesTable">
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>分类名称</th>
+                                            <th>描述</th>
+                                            <th>商品数量</th>
+                                            <th>操作</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td colspan="5" class="text-center">加载中...</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 首页商品管理页面 -->
+                <div id="homepage-products" class="page-content">
+                    <div class="page-header">
+                        <h2>首页商品管理</h2>
+                        <button class="btn btn-primary" id="addHomepageProductBtn">
+                            <i class="fas fa-plus"></i> 添加首页商品
+                        </button>
+                    </div>
+                    
+                    <!-- 当前首页商品 -->
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <h5><i class="fas fa-star"></i> 当前首页展示商品</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-hover" id="homepageProductsTable">
+                                    <thead>
+                                        <tr>
+                                            <th>排序</th>
+                                            <th>图片</th>
+                                            <th>商品名称</th>
+                                            <th>首页标题</th>
+                                            <th>价格</th>
+                                            <th>状态</th>
+                                            <th>操作</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td colspan="7" class="text-center">加载中...</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 可添加的商品列表 -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h5><i class="fas fa-list"></i> 可添加到首页的商品</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-hover" id="availableProductsTable">
+                                    <thead>
+                                        <tr>
+                                            <th>图片</th>
+                                            <th>商品名称</th>
+                                            <th>价格</th>
+                                            <th>库存</th>
+                                            <th>分类</th>
+                                            <th>操作</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td colspan="6" class="text-center">加载中...</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 统计报表页面 -->
+                <div id="reports" class="page-content">
+                    <div class="page-header">
+                        <h2>统计报表</h2>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5>销售趋势</h5>
+                                </div>
+                                <div class="card-body">
+                                    <canvas id="salesChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5>商品分类分布</h5>
+                                </div>
+                                <div class="card-body">
+                                    <canvas id="categoryChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 系统设置页面 -->
+                <div id="settings" class="page-content">
+                    <div class="page-header">
+                        <h2>系统设置</h2>
+                    </div>
+                    <div class="card">
+                        <div class="card-body">
+                            <form id="settingsForm">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <h5>基本设置</h5>
+                                        <div class="mb-3">
+                                            <label class="form-label">商城名称</label>
+                                            <input type="text" class="form-control" id="mallName" value="在线商城">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">管理员邮箱</label>
+                                            <input type="email" class="form-control" id="adminEmail">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <h5>安全设置</h5>
+                                        <div class="mb-3">
+                                            <label class="form-label">会话超时时间（分钟）</label>
+                                            <input type="number" class="form-control" id="sessionTimeout" value="30">
+                                        </div>
+                                        <div class="mb-3">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" id="enableLogging">
+                                                <label class="form-check-label">启用操作日志</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button type="submit" class="btn btn-primary">保存设置</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- 模态框 -->
+    <!-- 添加商品模态框 -->
+    <div class="modal fade" id="addProductModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">添加商品</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="addProductForm">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label">商品名称</label>
+                                    <input type="text" class="form-control" id="productName" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">价格</label>
+                                    <input type="number" class="form-control" id="productPrice" step="0.01" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">库存数量</label>
+                                    <input type="number" class="form-control" id="productStock" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label">分类</label>
+                                    <select class="form-control" id="productCategory" required>
+                                        <option value="">选择分类</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">商品图片URL</label>
+                                    <input type="url" class="form-control" id="productImage">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">商品描述</label>
+                                    <textarea class="form-control" id="productDescription" rows="3"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-primary" id="saveProductBtn">保存</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 添加分类模态框 -->
+    <div class="modal fade" id="addCategoryModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">添加分类</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="addCategoryForm">
+                        <div class="mb-3">
+                            <label class="form-label">分类名称</label>
+                            <input type="text" class="form-control" id="categoryName" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">分类描述</label>
+                            <textarea class="form-control" id="categoryDescription" rows="3"></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-primary" id="saveCategoryBtn">保存</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 首页商品管理模态框 -->
+    <div class="modal fade" id="homepageProductModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">设置首页商品</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="homepageProductForm">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label">商品名称</label>
+                                    <input type="text" class="form-control" id="homepageProductName" readonly>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">首页显示标题</label>
+                                    <input type="text" class="form-control" id="homepageDisplayTitle" placeholder="留空则使用商品名称">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">排序顺序</label>
+                                    <input type="number" class="form-control" id="homepageSortOrder" min="1" value="1">
+                                    <small class="form-text text-muted">数字越小越靠前</small>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label">商品图片</label>
+                                    <img id="homepageProductImage" src="" alt="商品图片" class="img-thumbnail" style="max-width: 200px; max-height: 200px;">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">首页显示描述</label>
+                                    <textarea class="form-control" id="homepageDisplayDescription" rows="3" placeholder="留空则使用商品描述"></textarea>
+                                </div>
+                                <div class="mb-3">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="featuredOnHomepage" checked>
+                                        <label class="form-check-label">在首页展示</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-primary" id="saveHomepageProductBtn">保存</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../frontend/libs/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="../frontend/js/api-config.js"></script>
+    <script src="js/admin.js"></script>
+    <script src="js/homepage-products.js"></script>
+</body>
+</html> 

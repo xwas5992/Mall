@@ -1,4 +1,4 @@
-
+package com.mall.authservice.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 
 @Data
 @Entity
-@Table(name = "users")
+@Table(name = "auth_user")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,13 +34,18 @@ public class User {
     @Enumerated(EnumType.STRING)
     private UserRole role = UserRole.USER;
 
-    private boolean enabled = true;
+    @Column(columnDefinition = "TINYINT(1)")
+    private Integer enabled = 1;
 
     @CreationTimestamp
     private LocalDateTime createdAt;
 
     @UpdateTimestamp
     private LocalDateTime updatedAt;
+
+    public boolean isEnabled() {
+        return enabled != null && enabled == 1;
+    }
 
     public enum UserRole {
         USER,

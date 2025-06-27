@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>个人中心 - 商城</title>
+    <link rel="stylesheet" href="../libs/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../libs/fontawesome/all.min.css">
+    <link rel="stylesheet" href="portal.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="bg-white shadow-sm">
+        <div class="container d-flex justify-content-between align-items-center py-2">
+            <a class="navbar-brand" href="../home/index.html">
+                <img src="https://via.placeholder.com/150x50?text=Logo" alt="Logo" style="height: 40px;">
+            </a>
+            <div class="d-flex align-items-center">
+                <a href="../home/index.html" class="nav-link">商城首页</a>
+                <div class="dropdown" id="user-menu-container"></div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Breadcrumb -->
+    <div class="container mt-4">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="../home/index.html">首页</a></li>
+                <li class="breadcrumb-item active" aria-current="page">个人中心</li>
+            </ol>
+        </nav>
+    </div>
+
+    <!-- Main Content -->
+    <main class="container my-4">
+        <div class="row">
+            <!-- Left Sidebar Menu -->
+            <div class="col-lg-3">
+                <div class="list-group portal-menu">
+                    <h6 class="list-group-header">订单中心</h6>
+                    <a href="#" class="list-group-item list-group-item-action">我的订单</a>
+                    <a href="#" class="list-group-item list-group-item-action">评价晒单</a>
+                    <a href="#" class="list-group-item list-group-item-action">以旧换新订单</a>
+                    <hr>
+                    <h6 class="list-group-header">个人中心</h6>
+                    <a href="#" class="list-group-item list-group-item-action active">我的个人中心</a>
+                    <a href="#" class="list-group-item list-group-item-action">消息通知</a>
+                    <a href="#" class="list-group-item list-group-item-action">收货地址</a>
+                    <hr>
+                    <h6 class="list-group-header">售后服务</h6>
+                    <a href="#" class="list-group-item list-group-item-action">服务记录</a>
+                    <a href="#" class="list-group-item list-group-item-action">申请服务</a>
+                    <hr>
+                    <h6 class="list-group-header">账户管理</h6>
+                    <a href="#" class="list-group-item list-group-item-action">个人信息</a>
+                    <a href="#" class="list-group-item list-group-item-action">修改密码</a>
+                </div>
+            </div>
+            
+            <!-- Right Content Panel -->
+            <div class="col-lg-9">
+                <div class="card border-0">
+                    <div class="card-body p-4">
+                        <div id="portal-content">
+                            <!-- User Info Header -->
+                            <div class="user-info-header d-flex align-items-center mb-5">
+                                <img src="https://via.placeholder.com/100/ff6700/ffffff?text=M" id="user-avatar" class="rounded-circle me-4" alt="User Avatar">
+                                <div class="user-details flex-grow-1">
+                                    <h4 id="user-greeting" class="mb-1">晚上好, <span class="username"></span></h4>
+                                    <p class="text-muted mb-2">祝您购物愉快~</p>
+                                    <a href="#" class="text-decoration-none small">修改个人信息 ></a>
+                                </div>
+                                <div class="security-info text-end">
+                                    <p class="mb-1"><strong>账户安全：</strong><span class="text-success">普通</span></p>
+                                    <p class="mb-1"><strong>绑定手机：</strong><span id="user-phone">173****14</span></p>
+                                    <p class="mb-0"><strong>绑定邮箱：</strong><span class="text-muted">未绑定</span></p>
+                                </div>
+                            </div>
+
+                            <!-- Quick Stats -->
+                            <div class="quick-stats row text-center">
+                                <div class="col-md-3">
+                                    <div class="stat-item">
+                                        <div class="stat-icon bg-orange"><i class="fas fa-wallet"></i></div>
+                                        <p class="stat-title mb-1">待支付的订单：<strong>0</strong></p>
+                                        <a href="#" class="stat-link">查看待支付订单 ></a>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="stat-item">
+                                        <div class="stat-icon bg-green"><i class="fas fa-truck"></i></div>
+                                        <p class="stat-title mb-1">待收货的订单：<strong>0</strong></p>
+                                        <a href="#" class="stat-link">查看待收货订单 ></a>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="stat-item">
+                                        <div class="stat-icon bg-blue"><i class="fas fa-comment-alt"></i></div>
+                                        <p class="stat-title mb-1">待评价商品数：<strong>0</strong></p>
+                                        <a href="#" class="stat-link">查看待评价商品 ></a>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="stat-item">
+                                        <div class="stat-icon bg-yellow"><i class="fas fa-heart"></i></div>
+                                        <p class="stat-title mb-1">喜欢的商品：<strong>0</strong></p>
+                                        <a href="#" class="stat-link">查看喜欢的商品 ></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="../libs/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="../js/auth.js"></script>
+    <script src="portal.js"></script>
+</body>
+</html> 

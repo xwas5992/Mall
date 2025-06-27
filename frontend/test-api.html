@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API连接测试</title>
+    <link href="libs/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="libs/fontawesome/all.min.css">
+</head>
+<body class="bg-light">
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-md-8 mx-auto">
+                <div class="card">
+                    <div class="card-header">
+                        <h4><i class="fas fa-plug me-2"></i>API连接测试</h4>
+                    </div>
+                    <div class="card-body">
+                        <div id="testResults">
+                            <div class="alert alert-info">
+                                <i class="fas fa-spinner fa-spin me-2"></i>正在测试API连接...
+                            </div>
+                        </div>
+                        
+                        <div class="mt-3">
+                            <button class="btn btn-primary" onclick="testProductAPI()">
+                                <i class="fas fa-test me-2"></i>测试商品API
+                            </button>
+                            <button class="btn btn-success" onclick="testAuthAPI()">
+                                <i class="fas fa-user me-2"></i>测试认证API
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="libs/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="js/api-config.js"></script>
+    <script>
+        // 测试商品API
+        async function testProductAPI() {
+            const resultsDiv = document.getElementById('testResults');
+            resultsDiv.innerHTML = '<div class="alert alert-info"><i class="fas fa-spinner fa-spin me-2"></i>正在测试商品API...</div>';
+            
+            try {
+                console.log('API配置:', window.API_CONFIG);
+                console.log('商品API地址:', window.API_CONFIG.product.baseUrl);
+                
+                const response = await fetch(`${window.API_CONFIG.product.baseUrl}?page=0&size=5`, {
+                    method: 'GET',
+                    mode: 'cors',
+                    credentials: 'omit',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    }
+                });
+                
+                console.log('响应状态:', response.status);
+                console.log('响应头:', response.headers);
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    console.log('响应数据:', data);
+                    resultsDiv.innerHTML = `
+                        <div class="alert alert-success">
+                            <i class="fas fa-check-circle me-2"></i>
+                            <strong>商品API连接成功！</strong><br>
+                            状态码: ${response.status}<br>
+                            返回数据: ${JSON.stringify(data, null, 2)}
+                        </div>
+                    `;
+                } else {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+            } catch (error) {
+                console.error('API测试错误:', error);
+                resultsDiv.innerHTML = `
+                    <div class="alert alert-danger">
+                        <i class="fas fa-exclamation-triangle me-2"></i>
+                        <strong>商品API连接失败！</strong><br>
+                        错误信息: ${error.message}<br>
+                        API地址: ${window.API_CONFIG.product.baseUrl}<br>
+                        <br>
+                        <strong>解决方案：</strong><br>
+                        1. 重启后端服务以应用CORS配置<br>
+                        2. 或使用HTTP服务器访问前端<br>
+                        3. 或检查浏览器控制台获取详细错误
+                    </div>
+                `;
+            }
+        }
+        
+        // 测试认证API
+        async function testAuthAPI() {
+            const resultsDiv = document.getElementById('testResults');
+            resultsDiv.innerHTML = '<div class="alert alert-info"><i class="fas fa-spinner fa-spin me-2"></i>正在测试认证API...</div>';
+            
+            try {
+                const response = await fetch(`${window.API_CONFIG.auth.baseUrl}/health`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                if (response.ok) {
+                    resultsDiv.innerHTML = `
+                        <div class="alert alert-success">
+                            <i class="fas fa-check-circle me-2"></i>
+                            <strong>认证API连接成功！</strong><br>
+                            状态码: ${response.status}
+                        </div>
+                    `;
+                } else {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+            } catch (error) {
+                console.error('认证API测试错误:', error);
+                resultsDiv.innerHTML = `
+                    <div class="alert alert-danger">
+                        <i class="fas fa-exclamation-triangle me-2"></i>
+                        <strong>认证API连接失败！</strong><br>
+                        错误信息: ${error.message}<br>
+                        API地址: ${window.API_CONFIG.auth.baseUrl}
+                    </div>
+                `;
+            }
+        }
+        
+        // 页面加载时自动测试
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(testProductAPI, 1000);
+        });
+    </script>
+</body>
+</html> 

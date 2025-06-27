@@ -1,0 +1,292 @@
+/* 登录页自定义样式 - 与Bootstrap配合 */
+
+/* 全局样式 */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+}
+
+/* 导航栏样式 */
+.navbar-brand {
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+.navbar-brand i {
+    font-size: 1.8rem;
+}
+
+/* 左侧装饰区域 */
+.bg-success {
+    background: linear-gradient(135deg, #198754 0%, #146c43 100%) !important;
+}
+
+/* 表单样式增强 */
+.form-control {
+    border-radius: 8px;
+    border: 2px solid #e9ecef;
+    transition: all 0.3s ease;
+}
+
+.form-control:focus {
+    border-color: #198754;
+    box-shadow: 0 0 0 0.2rem rgba(25, 135, 84, 0.25);
+}
+
+.form-control-lg {
+    padding: 0.75rem 1rem;
+    font-size: 1rem;
+}
+
+/* 输入组样式 */
+.input-group .btn {
+    border-radius: 0 8px 8px 0;
+    border-left: none;
+}
+
+.input-group .form-control {
+    border-radius: 8px 0 0 8px;
+}
+
+/* 按钮样式 */
+.btn-success {
+    background: linear-gradient(135deg, #198754 0%, #146c43 100%);
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn-success:hover {
+    background: linear-gradient(135deg, #146c43 0%, #0f5132 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(25, 135, 84, 0.3);
+}
+
+.btn-outline-success {
+    border-color: #198754;
+    color: #198754;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.btn-outline-success:hover {
+    background-color: #198754;
+    border-color: #198754;
+    transform: translateY(-1px);
+}
+
+/* 表单验证样式 */
+.was-validated .form-control:valid {
+    border-color: #198754;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3e%3cpath fill='%23198754' d='m2.3 6.73.94-.94 2.54 2.54 2.54-2.54.94.94L5.78 9.27z'/%3e%3c/svg%3e");
+}
+
+.was-validated .form-control:invalid {
+    border-color: #dc3545;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' width='12' height='12' fill='none' stroke='%23dc3545'%3e%3ccircle cx='6' cy='6' r='4.5'/%3e%3cpath d='m5.8 4.6 1.4 1.4M7.2 4.6l-1.4 1.4'/%3e%3c/svg%3e");
+}
+
+/* 复选框样式 */
+.form-check-input:checked {
+    background-color: #198754;
+    border-color: #198754;
+}
+
+.form-check-input:focus {
+    border-color: #198754;
+    box-shadow: 0 0 0 0.2rem rgba(25, 135, 84, 0.25);
+}
+
+/* 链接样式 */
+.text-success {
+    color: #198754 !important;
+}
+
+.text-success:hover {
+    color: #146c43 !important;
+}
+
+/* 社交登录按钮 */
+.btn-outline-primary {
+    border-color: #0d6efd;
+    color: #0d6efd;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.btn-outline-primary:hover {
+    background-color: #0d6efd;
+    border-color: #0d6efd;
+    transform: translateY(-1px);
+}
+
+.btn-outline-danger {
+    border-color: #dc3545;
+    color: #dc3545;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.btn-outline-danger:hover {
+    background-color: #dc3545;
+    border-color: #dc3545;
+    transform: translateY(-1px);
+}
+
+/* 错误提示样式 */
+.alert-danger {
+    background-color: #f8d7da;
+    border-color: #f5c6cb;
+    color: #721c24;
+    border-radius: 8px;
+}
+
+/* 动画效果 */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.form-control, .btn {
+    animation: fadeInUp 0.6s ease-out;
+}
+
+/* 装饰性元素动画 */
+.bg-success i {
+    animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+    0%, 100% {
+        transform: translateY(0px);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+/* 响应式设计 */
+@media (max-width: 991.98px) {
+    .min-vh-100 {
+        min-height: auto !important;
+    }
+    
+    .col-lg-6 {
+        padding: 2rem 1rem;
+    }
+}
+
+@media (max-width: 575.98px) {
+    .form-control-lg {
+        font-size: 16px; /* 防止iOS缩放 */
+    }
+    
+    .btn-lg {
+        padding: 0.75rem 1rem;
+        font-size: 1rem;
+    }
+    
+    .display-6 {
+        font-size: 1.5rem;
+    }
+    
+    .lead {
+        font-size: 1rem;
+    }
+}
+
+/* 加载状态 */
+.btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* 密码显示/隐藏按钮 */
+.input-group .btn-outline-secondary {
+    border-color: #6c757d;
+    color: #6c757d;
+}
+
+.input-group .btn-outline-secondary:hover {
+    background-color: #6c757d;
+    border-color: #6c757d;
+    color: white;
+}
+
+/* 表单切换动画 */
+#loginForm, #registerForm {
+    transition: opacity 0.3s ease;
+}
+
+/* 验证码按钮状态 */
+#getCodeBtn:disabled {
+    background-color: #6c757d;
+    border-color: #6c757d;
+    color: white;
+}
+
+/* 自定义滚动条 */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #198754;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #146c43;
+}
+
+/* 焦点样式 */
+.form-control:focus,
+.btn:focus,
+.form-check-input:focus {
+    outline: none;
+}
+
+/* 阴影效果 */
+.shadow-sm {
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075) !important;
+}
+
+/* 透明度效果 */
+.opacity-75 {
+    opacity: 0.75 !important;
+}
+
+.opacity-10 {
+    opacity: 0.1 !important;
+}
+
+/* 文本选择 */
+::selection {
+    background-color: rgba(25, 135, 84, 0.2);
+    color: #198754;
+}
+
+/* 打印样式 */
+@media print {
+    .bg-success,
+    .btn,
+    .navbar {
+        display: none !important;
+    }
+    
+    body {
+        background: white !important;
+    }
+}

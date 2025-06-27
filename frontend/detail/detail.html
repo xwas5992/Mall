@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>商品详情 - 农产品商城</title>
+    <!-- Bootstrap CSS -->
+    <link href="../libs/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="../libs/fontawesome/all.min.css">
+    <!-- 自定义样式 -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-light">
+    <!-- 导航栏 -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top">
+        <div class="container">
+            <!-- Logo -->
+            <a class="navbar-brand d-flex align-items-center" href="../home/index.html">
+                <i class="fas fa-leaf text-success me-2"></i>
+                <span class="fw-bold">农产品商城</span>
+            </a>
+
+            <!-- 搜索框 -->
+            <div class="d-flex flex-grow-1 mx-4">
+                <div class="input-group">
+                    <input type="text" class="form-control" id="searchInput" placeholder="搜索商品名称...">
+                    <button class="btn btn-success" type="button" id="searchBtn">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- 用户登录区域 -->
+            <div class="d-flex align-items-center">
+                <div class="dropdown" id="loginArea">
+                    <!-- 动态生成登录按钮 -->
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 面包屑导航 -->
+    <div class="container mt-3">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="../home/index.html" class="text-decoration-none">
+                        <i class="fas fa-home me-1"></i>首页
+                    </a>
+                </li>
+                <li class="breadcrumb-item">
+                    <a href="../search/search.html" class="text-decoration-none">商品搜索</a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">商品详情</li>
+            </ol>
+        </nav>
+    </div>
+
+    <!-- Main Content -->
+    <main class="container my-5">
+        <!-- 加载状态 -->
+        <div id="loading-container" class="text-center py-5">
+            <div class="spinner-border text-success" role="status">
+                <span class="visually-hidden">加载中...</span>
+            </div>
+            <p class="mt-3 text-muted">正在加载商品信息...</p>
+        </div>
+
+        <!-- 商品详情容器 -->
+        <div id="product-detail-container" class="row" style="display: none;">
+            <!-- 商品图片区域 -->
+            <div class="col-lg-6 mb-4">
+                <div class="product-gallery">
+                    <div class="main-image-container mb-3">
+                        <img id="mainImage" src="" alt="商品主图" class="img-fluid rounded shadow">
+                    </div>
+                    <div class="thumbnail-container">
+                        <div id="thumbnailList" class="d-flex gap-2 flex-wrap">
+                            <!-- 缩略图将动态生成 -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 商品信息区域 -->
+            <div class="col-lg-6">
+                <div class="product-info">
+                    <!-- 商品标题 -->
+                    <h1 id="productTitle" class="product-title mb-3"></h1>
+
+                    <!-- 商品评分 -->
+                    <div class="product-rating mb-3">
+                        <div class="stars text-warning">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star-half-alt"></i>
+                        </div>
+                        <span class="rating-text ms-2">4.5 (128条评价)</span>
+                    </div>
+
+                    <!-- 商品价格 -->
+                    <div class="product-price mb-4">
+                        <div class="current-price">
+                            <span class="price-symbol">¥</span>
+                            <span id="currentPrice" class="price-value"></span>
+                        </div>
+                        <div class="original-price text-muted text-decoration-line-through">
+                            <span class="price-symbol">¥</span>
+                            <span id="originalPrice"></span>
+                        </div>
+                        <span id="discountTag" class="badge bg-danger ms-2"></span>
+                    </div>
+
+                    <!-- 库存信息 -->
+                    <div class="stock-info mb-3">
+                        <span id="stockBadge" class="badge bg-success me-2">
+                            <i class="fas fa-check-circle me-1"></i>有货
+                        </span>
+                        <span id="stockInfo" class="text-muted"></span>
+                    </div>
+
+                    <!-- 商品规格选择 -->
+                    <div class="product-specs mb-4">
+                        <div id="specOptions">
+                            <!-- 规格选项将动态生成 -->
+                        </div>
+                    </div>
+
+                    <!-- 数量选择 -->
+                    <div class="quantity-controls mb-4">
+                        <label class="form-label fw-bold">购买数量：</label>
+                        <div class="input-group" style="width: 150px;">
+                            <button class="btn btn-outline-secondary quantity-btn" type="button" onclick="decreaseQuantity()">
+                                <i class="fas fa-minus"></i>
+                            </button>
+                            <input type="number" class="form-control text-center" id="quantityInput" value="1" min="1" max="99">
+                            <button class="btn btn-outline-secondary quantity-btn" type="button" onclick="increaseQuantity()">
+                                <i class="fas fa-plus"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- 购买按钮 -->
+                    <div class="purchase-actions mb-4">
+                        <div class="row g-3">
+                            <div class="col-6">
+                                <button id="add-to-cart-btn" class="btn btn-outline-success btn-add-cart w-100">
+                                    <i class="fas fa-shopping-cart me-2"></i>加入购物车
+                                </button>
+                            </div>
+                            <div class="col-6">
+                                <button id="buy-now-btn" class="btn btn-success btn-buy-now w-100">
+                                    <i class="fas fa-bolt me-2"></i>立即购买
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 服务承诺 -->
+                    <div class="product-services">
+                        <div class="row g-3">
+                            <div class="col-6">
+                                <div class="service-item text-center p-3 bg-light rounded">
+                                    <i class="fas fa-truck text-success mb-2"></i>
+                                    <div class="small">全国包邮</div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="service-item text-center p-3 bg-light rounded">
+                                    <i class="fas fa-shield-alt text-success mb-2"></i>
+                                    <div class="small">正品保证</div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="service-item text-center p-3 bg-light rounded">
+                                    <i class="fas fa-undo text-success mb-2"></i>
+                                    <div class="small">7天退换</div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="service-item text-center p-3 bg-light rounded">
+                                    <i class="fas fa-headset text-success mb-2"></i>
+                                    <div class="small">24小时客服</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 商品详情标签页 -->
+        <div id="product-tabs-container" class="product-tabs mt-5" style="display: none;">
+            <div class="card">
+                <div class="card-header bg-white">
+                    <ul class="nav nav-tabs card-header-tabs" id="productTabs" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active tab-btn" id="detail-tab" data-bs-toggle="tab" data-bs-target="#detail-panel" type="button" role="tab" onclick="switchTab('detail')">
+                                <i class="fas fa-info-circle me-2"></i>商品详情
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link tab-btn" id="specs-tab" data-bs-toggle="tab" data-bs-target="#specs-panel" type="button" role="tab" onclick="switchTab('specs')">
+                                <i class="fas fa-list me-2"></i>规格参数
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link tab-btn" id="reviews-tab" data-bs-toggle="tab" data-bs-target="#reviews-panel" type="button" role="tab" onclick="switchTab('reviews')">
+                                <i class="fas fa-star me-2"></i>用户评价
+                            </button>
+                        </li>
+                    </ul>
+                </div>
+                <div class="card-body">
+                    <div class="tab-content" id="productTabContent">
+                        <div class="tab-pane fade show active" id="detail-panel" role="tabpanel">
+                            <div id="detailContent">
+                                <!-- 商品详情内容将动态生成 -->
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="specs-panel" role="tabpanel">
+                            <div id="specsContent">
+                                <!-- 规格参数内容将动态生成 -->
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="reviews-panel" role="tabpanel">
+                            <div id="reviewsContent">
+                                <!-- 用户评价内容将动态生成 -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 错误信息显示 -->
+        <div id="error-container" class="text-center py-5" style="display: none;">
+            <div class="alert alert-danger" role="alert">
+                <i class="fas fa-exclamation-triangle me-2"></i>
+                <span id="error-message">加载失败，请稍后重试</span>
+            </div>
+            <button class="btn btn-outline-primary mt-3" onclick="location.reload()">
+                <i class="fas fa-redo me-2"></i>重新加载
+            </button>
+        </div>
+    </main>
+
+    <!-- 登录模态框 -->
+    <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="loginModalLabel">用户登录</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="loginForm">
+                        <div class="mb-3">
+                            <label for="username" class="form-label">用户名</label>
+                            <input type="text" class="form-control" id="username" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="password" class="form-label">密码</label>
+                            <input type="password" class="form-control" id="password" required>
+                        </div>
+                        <button type="submit" class="btn btn-success w-100">登录</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 购物车模态框 -->
+    <div class="modal fade" id="cartModal" tabindex="-1" aria-labelledby="cartModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="cartModalLabel">
+                        <i class="fas fa-shopping-cart me-2"></i>购物车
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="cartItems">
+                        <!-- 购物车商品将动态生成 -->
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="d-flex justify-content-between align-items-center w-100">
+                        <div class="cart-total">
+                            <span class="fw-bold">总计：</span>
+                            <span id="cartTotalPrice" class="text-danger fw-bold">¥0.00</span>
+                        </div>
+                        <button type="button" class="btn btn-success" onclick="checkout()">
+                            <i class="fas fa-credit-card me-2"></i>去结算
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Container for notifications -->
+    <div id="toast-container" class="position-fixed bottom-0 end-0 p-3" style="z-index: 1100">
+        <!-- Toasts will be appended here -->
+    </div>
+
+    <!-- 返回顶部按钮 -->
+    <button id="backToTop" class="btn btn-success position-fixed bottom-0 end-0 m-3" style="display: none; z-index: 1000;" onclick="scrollToTop()">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <!-- Bootstrap JS -->
+    <script src="../libs/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="../js/api-config.js"></script>
+    <script src="../js/auth.js"></script>
+    <script src="../js/cart-api.js"></script>
+    <script src="../js/cart-manager.js"></script>
+    <script src="detail.js"></script>
+</body>
+</html> 
