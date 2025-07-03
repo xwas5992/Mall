@@ -33,11 +33,11 @@ public class AuthController {
     private final JwtTokenProvider jwtTokenProvider;
 
     @PostMapping("/send-code")
-    @Operation(summary = "发送验证码", description = "向指定邮箱发送验证码")
+    @Operation(summary = "发送验证码", description = "向指定手机号发送验证码")
     public ResponseEntity<Map<String, Object>> sendCode(
-            @Parameter(description = "邮箱地址") @RequestParam String email) {
-        String code = verificationCodeService.generateCode(email);
-        // TODO: 实际项目应通过邮件/短信发送，这里直接返回code方便前端测试
+            @Parameter(description = "手机号") @RequestParam String phone) {
+        String code = verificationCodeService.generateCode(phone);
+        // TODO: 实际项目应通过短信发送，这里直接返回code方便前端测试
         Map<String, Object> result = new HashMap<>();
         result.put("success", true);
         result.put("code", code);
@@ -50,7 +50,7 @@ public class AuthController {
             @Parameter(description = "注册信息") @Valid @RequestBody RegisterRequest request, 
             @Parameter(description = "验证码") @RequestParam String code) {
         // 校验验证码
-        if (!verificationCodeService.validateCode(request.getEmail(), code)) {
+        if (!verificationCodeService.validateCode(request.getPhone(), code)) {
             throw new RuntimeException("验证码错误或已过期");
         }
         return ResponseEntity.ok(authService.register(request));
@@ -77,7 +77,6 @@ public class AuthController {
                 response.put("valid", true);
                 response.put("username", username);
                 response.put("role", user.getRole().name());
-                response.put("email", user.getEmail());
                 response.put("fullName", user.getFullName());
                 return ResponseEntity.ok(response);
             } else {
@@ -149,5 +148,22 @@ public class AuthController {
         health.put("service", "auth-service");
         health.put("timestamp", System.currentTimeMillis());
         return ResponseEntity.ok(health);
+    }
+
+    @PostMapping("/sync-user-info")
+    public ResponseEntity<?> syncUserInfo(@RequestBody Map<String, Object> userInfo) {
+        String username = (String) userInfo.get("username");
+        String phone = (String) userInfo.get("phone");
+        String nickname = (String) userInfo.get("nickname");
+        String avatar = (String) userInfo.get("avatar");
+        // ... 可扩展更多字段
+
+        User user = authService.findByUsername(username);
+        if (phone != null) user.setPhone(phone);
+        if (nickname != null) user.setNickname(nickname);
+        if (avatar != null) user.setAvatar(avatar);
+        // ... 可扩展更多字段
+        authService.saveUser(user);
+        return ResponseEntity.ok().build();
     }
 } 

@@ -27,6 +27,11 @@ public class ProductMapper {
         response.setUpdatedAt(product.getUpdatedAt());
         response.setCategoryId(product.getCategoryId());
         
+        // 映射排序相关字段
+        response.setSales(product.getSales());
+        response.setRating(product.getRating());
+        response.setCreateTime(product.getCreateTime());
+        
         return response;
     }
     

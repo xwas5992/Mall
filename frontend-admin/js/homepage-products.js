@@ -96,9 +96,10 @@ class HomepageProductManager {
                            onchange="homepageProductManager.updateSortOrder(${product.id}, this.value)">
                 </td>
                 <td>
-                    <img src="${product.imageUrl || 'https://via.placeholder.com/50x50?text=No+Image'}" 
+                    <img src="${product.imageUrl || 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTAiIGhlaWdodD0iNTAiIHZpZXdCb3g9IjAgMCA1MCA1MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjUwIiBoZWlnaHQ9IjUwIiBmaWxsPSIjRjVGNUY1Ii8+CjxwYXRoIGQ9Ik0xNSAxNUgzNVYzNUgxNVYxNVoiIHN0cm9rZT0iI0NDQyIgc3Ryb2tlLXdpZHRoPSIyIi8+CjxwYXRoIGQ9Ik0xNSAxNUwzNSAzNSIgc3Ryb2tlPSIjQ0NDIiBzdHJva2Utd2lkdGg9IjIiLz4KPHBhdGggZD0iTTM1IDE1TDE1IDM1IiBzdHJva2U9IiNDQ0MiIHN0cm9rZS13aWR0aD0iMiIvPgo8L3N2Zz4K'}" 
                          alt="${product.name}" 
-                         style="width: 50px; height: 50px; object-fit: cover;">
+                         style="width: 50px; height: 50px; object-fit: cover;"
+                         onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTAiIGhlaWdodD0iNTAiIHZpZXdCb3g9IjAgMCA1MCA1MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjUwIiBoZWlnaHQ9IjUwIiBmaWxsPSIjRjVGNUY1Ii8+CjxwYXRoIGQ9Ik0xNSAxNUgzNVYzNUgxNVYxNVoiIHN0cm9rZT0iI0NDQyIgc3Ryb2tlLXdpZHRoPSIyIi8+CjxwYXRoIGQ9Ik0xNSAxNUwzNSAzNSIgc3Ryb2tlPSIjQ0NDIiBzdHJva2Utd2lkdGg9IjIiLz4KPHBhdGggZD0iTTM1IDE1TDE1IDM1IiBzdHJva2U9IiNDQ0MiIHN0cm9rZS13aWR0aD0iMiIvPgo8L3N2Zz4K'">
                 </td>
                 <td>${product.name}</td>
                 <td>${product.homepageDisplayTitle || product.name}</td>
@@ -131,9 +132,10 @@ class HomepageProductManager {
         tbody.innerHTML = products.map(product => `
             <tr>
                 <td>
-                    <img src="${product.imageUrl || 'https://via.placeholder.com/50x50?text=No+Image'}" 
+                    <img src="${product.imageUrl || 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTAiIGhlaWdodD0iNTAiIHZpZXdCb3g9IjAgMCA1MCA1MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjUwIiBoZWlnaHQ9IjUwIiBmaWxsPSIjRjVGNUY1Ii8+CjxwYXRoIGQ9Ik0xNSAxNUgzNVYzNUgxNVYxNVoiIHN0cm9rZT0iI0NDQyIgc3Ryb2tlLXdpZHRoPSIyIi8+CjxwYXRoIGQ9Ik0xNSAxNUwzNSAzNSIgc3Ryb2tlPSIjQ0NDIiBzdHJva2Utd2lkdGg9IjIiLz4KPHBhdGggZD0iTTM1IDE1TDE1IDM1IiBzdHJva2U9IiNDQ0MiIHN0cm9rZS13aWR0aD0iMiIvPgo8L3N2Zz4K'}" 
                          alt="${product.name}" 
-                         style="width: 50px; height: 50px; object-fit: cover;">
+                         style="width: 50px; height: 50px; object-fit: cover;"
+                         onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTAiIGhlaWdodD0iNTAiIHZpZXdCb3g9IjAgMCA1MCA1MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjUwIiBoZWlnaHQ9IjUwIiBmaWxsPSIjRjVGNUY1Ii8+CjxwYXRoIGQ9Ik0xNSAxNUgzNVYzNUgxNVYxNVoiIHN0cm9rZT0iI0NDQyIgc3Ryb2tlLXdpZHRoPSIyIi8+CjxwYXRoIGQ9Ik0xNSAxNUwzNSAzNSIgc3Ryb2tlPSIjQ0NDIiBzdHJva2Utd2lkdGg9IjIiLz4KPHBhdGggZD0iTTM1IDE1TDE1IDM1IiBzdHJva2U9IiNDQ0MiIHN0cm9rZS13aWR0aD0iMiIvPgo8L3N2Zz4K'">
                 </td>
                 <td>${product.name}</td>
                 <td>¥${product.price}</td>
@@ -160,12 +162,12 @@ class HomepageProductManager {
             document.getElementById('homepageSortOrder').value = product.homepageSortOrder || 1;
             document.getElementById('homepageDisplayDescription').value = product.homepageDisplayDescription || '';
             document.getElementById('featuredOnHomepage').checked = product.featuredOnHomepage !== false;
-            document.getElementById('homepageProductImage').src = product.imageUrl || 'https://via.placeholder.com/200x200?text=No+Image';
+            document.getElementById('homepageProductImage').src = product.imageUrl || 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDIwMCAyMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIyMDAiIGhlaWdodD0iMjAwIiBmaWxsPSIjRjVGNUY1Ii8+CjxwYXRoIGQ9Ik02MCA2MEgxNDBWMTRwSDYwVjYwWiIgc3Ryb2tlPSIjQ0NDIiBzdHJva2Utd2lkdGg9IjQiLz4KPHBhdGggZD0iTTYwIDYwTDE0MCAxNDAiIHN0cm9rZT0iI0NDQyIgc3Ryb2tlLXdpZHRoPSI0Ii8+CjxwYXRoIGQ9Ik0xNDAgNjBMNjAgMTQwIiBzdHJva2U9IiNDQ0MiIHN0cm9rZS13aWR0aD0iNCIvPgo8L3N2Zz4K';
         } else {
             // 添加模式
             document.getElementById('homepageProductForm').reset();
             document.getElementById('homepageProductName').value = '';
-            document.getElementById('homepageProductImage').src = 'https://via.placeholder.com/200x200?text=No+Image';
+            document.getElementById('homepageProductImage').src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDIwMCAyMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIyMDAiIGhlaWdodD0iMjAwIiBmaWxsPSIjRjVGNUY1Ii8+CjxwYXRoIGQ9Ik02MCA2MEgxNDBWMTRwSDYwVjYwWiIgc3Ryb2tlPSIjQ0NDIiBzdHJva2Utd2lkdGg9IjQiLz4KPHBhdGggZD0iTTYwIDYwTDE0MCAxNDAiIHN0cm9rZT0iI0NDQyIgc3Ryb2tlLXdpZHRoPSI0Ii8+CjxwYXRoIGQ9Ik0xNDAgNjBMNjAgMTQwIiBzdHJva2U9IiNDQ0MiIHN0cm9rZS13aWR0aD0iNCIvPgo8L3N2Zz4K';
         }
         
         modal.show();
@@ -304,15 +306,19 @@ class HomepageProductManager {
             });
 
             if (!response.ok) {
-                throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                const errorText = await response.text();
+                throw new Error(`HTTP ${response.status}: ${errorText}`);
             }
 
+            const result = await response.json();
             this.showMessage('商品已从首页下架', 'success');
-            this.loadHomepageProducts();
-            this.loadAvailableProducts();
+            
+            // 刷新数据
+            await this.loadHomepageProducts();
+            await this.loadAvailableProducts();
         } catch (error) {
             console.error('下架商品失败:', error);
-            this.showMessage('下架商品失败', 'error');
+            this.showMessage(`下架商品失败: ${error.message}`, 'error');
         }
     }
 

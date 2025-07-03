@@ -141,7 +141,7 @@ async function handleLogin(e) {
         return;
     }
     
-    const username = document.getElementById('username').value.trim();
+    const phone = document.getElementById('username').value.trim();
     const password = document.getElementById('password').value;
     const rememberMe = document.getElementById('rememberMe').checked;
     
@@ -153,7 +153,7 @@ async function handleLogin(e) {
     
     try {
         // 调用登录API
-        const response = await login(username, password);
+        const response = await login(phone, password);
         
         if (response.ok) {
             const data = await response.json();
@@ -163,7 +163,7 @@ async function handleLogin(e) {
             
             // 记住用户名
             if (rememberMe) {
-                localStorage.setItem('savedUsername', username);
+                localStorage.setItem('savedUsername', phone);
                 localStorage.setItem('rememberMe', 'true');
             } else {
                 localStorage.removeItem('savedUsername');
@@ -225,11 +225,11 @@ async function handleRegister(e) {
         return;
     }
     
-    // 暂时跳过验证码验证，因为后端没有此接口
-    // if (!code) {
-    //     showError('请输入验证码');
-    //     return;
-    // }
+    // 验证验证码
+    if (!code) {
+        showError('请输入验证码');
+        return;
+    }
     
     // 显示加载状态
     const submitBtn = form.querySelector('button[type="submit"]');
@@ -276,9 +276,13 @@ async function handleRegister(e) {
 
 // 获取验证码
 async function getVerificationCode() {
-    const email = document.getElementById('regPhone').value.trim() + '@example.com';
-    if (!email) {
-        showError('请先输入邮箱/手机号');
+    const phone = document.getElementById('regPhone').value.trim();
+    if (!phone) {
+        showError('请先输入手机号码');
+        return;
+    }
+    if (!validatePhoneNumber(phone)) {
+        showError('请输入有效的手机号码');
         return;
     }
     const btn = document.getElementById('getCodeBtn');
@@ -286,27 +290,30 @@ async function getVerificationCode() {
     try {
         btn.disabled = true;
         btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>发送中...';
-        // 调用发送验证码API
-        const response = await fetch(`${window.API_CONFIG.auth.baseUrl}/send-code?email=${encodeURIComponent(email)}`, {
-            method: 'POST'
+        
+        // 调用后端发送验证码接口
+        const response = await fetch(`${window.API_CONFIG.auth.baseUrl}/send-code?phone=${encodeURIComponent(phone)}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            }
         });
+        
         if (response.ok) {
             const data = await response.json();
-            showSuccess('验证码已发送');
-            if (data.code) {
-                console.log('【开发调试用】收到验证码：', data.code);
-            }
-            startCountdown(btn);
-        } else {
-            let errorMsg = '发送失败';
-            const contentType = response.headers.get('content-type');
-            if (contentType && contentType.includes('application/json')) {
-                const errorData = await response.json();
-                errorMsg = errorData.message || errorMsg;
+            if (data.success) {
+                // 开发环境下显示验证码
+                console.log('【开发调试用】手机号', phone, '的验证码为：', data.code);
+                showSuccess('验证码已发送（请查看控制台）');
+                startCountdown(btn);
             } else {
-                errorMsg = await response.text() || errorMsg;
+                showError(data.message || '发送验证码失败');
+                btn.disabled = false;
+                btn.innerHTML = originalText;
             }
-            showError(errorMsg);
+        } else {
+            const errorData = await response.json();
+            showError(errorData.message || '发送验证码失败');
             btn.disabled = false;
             btn.innerHTML = originalText;
         }
@@ -367,14 +374,23 @@ function validatePhoneNumber(phone) {
 
 // 显示错误信息
 function showError(message) {
-    const errorDiv = document.getElementById('formError');
+    let errorDiv = document.getElementById('formError');
+    if (!errorDiv) {
+        errorDiv = document.createElement('div');
+        errorDiv.id = 'formError';
+        errorDiv.className = 'alert alert-danger';
+        errorDiv.style.display = 'none';
+        // 默认插入到注册表单前
+        const regForm = document.getElementById('registerForm');
+        if (regForm && regForm.parentNode) {
+            regForm.parentNode.insertBefore(errorDiv, regForm);
+        } else {
+            document.body.appendChild(errorDiv);
+        }
+    }
     errorDiv.textContent = message;
     errorDiv.style.display = 'block';
-    
-    // 自动隐藏
-    setTimeout(() => {
-        hideError();
-    }, 5000);
+    setTimeout(() => { hideError(); }, 5000);
 }
 
 // 隐藏错误信息
@@ -409,7 +425,7 @@ function showSuccess(message) {
 }
 
 // API调用函数
-async function login(username, password) {
+async function login(phone, password) {
     try {
         const response = await fetch(`${window.API_CONFIG.auth.baseUrl}/login`, {
             method: 'POST',
@@ -417,11 +433,10 @@ async function login(username, password) {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                username: username,
+                phone: phone,
                 password: password
             })
         });
-        
         return response;
     } catch (error) {
         console.error('登录API调用失败:', error);
@@ -437,10 +452,8 @@ async function register(phone, code, password) {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                username: phone,
-                password: password,
-                email: phone + '@example.com',
-                fullName: '用户' + phone.substring(7)
+                phone: phone,
+                password: password
             })
         });
         return response;
@@ -471,8 +484,7 @@ if (typeof fetch === 'undefined' || !navigator.onLine) {
             user: {
                 id: 1,
                 username: username,
-                nickname: username,
-                email: username + '@example.com'
+                nickname: username
             }
         });
     };

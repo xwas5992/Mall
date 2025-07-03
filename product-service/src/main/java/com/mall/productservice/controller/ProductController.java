@@ -127,11 +127,43 @@ public class ProductController {
             @Parameter(description = "商品品牌") @RequestParam(required = false) String brand,
             @Parameter(description = "最低价格") @RequestParam(required = false) BigDecimal minPrice,
             @Parameter(description = "最高价格") @RequestParam(required = false) BigDecimal maxPrice,
+            @Parameter(description = "排序方式") @RequestParam(required = false) String sortBy,
             @Parameter(description = "页码") @RequestParam(defaultValue = "0") int page,
             @Parameter(description = "每页大小") @RequestParam(defaultValue = "10") int size) {
-        Page<Product> products = productService.searchWithFilters(keyword, category, categoryId, brand, minPrice, maxPrice, PageRequest.of(page, size));
+        
+        // 创建排序对象
+        Sort sort = createSort(sortBy);
+        PageRequest pageRequest = PageRequest.of(page, size, sort);
+        
+        Page<Product> products = productService.searchWithFilters(keyword, category, categoryId, brand, minPrice, maxPrice, pageRequest);
         Page<ProductResponse> response = products.map(productMapper::toResponse);
         return ResponseEntity.ok(response);
+    }
+    
+    // 创建排序对象
+    private Sort createSort(String sortBy) {
+        if (sortBy == null || sortBy.isEmpty() || "default".equals(sortBy)) {
+            return Sort.by(Sort.Direction.DESC, "id"); // 默认按ID降序
+        }
+        
+        switch (sortBy) {
+            case "price-asc":
+                return Sort.by(Sort.Direction.ASC, "price");
+            case "price-desc":
+                return Sort.by(Sort.Direction.DESC, "price");
+            case "sales":
+                return Sort.by(Sort.Direction.DESC, "sales");
+            case "rating":
+                return Sort.by(Sort.Direction.DESC, "rating");
+            case "newest":
+                return Sort.by(Sort.Direction.DESC, "createTime");
+            case "name-asc":
+                return Sort.by(Sort.Direction.ASC, "name");
+            case "name-desc":
+                return Sort.by(Sort.Direction.DESC, "name");
+            default:
+                return Sort.by(Sort.Direction.DESC, "id");
+        }
     }
     
     @PutMapping("/{id}")

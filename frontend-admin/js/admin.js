@@ -365,7 +365,6 @@ class AdminPanel {
                 <tr>
                     <td>${user.id}</td>
                     <td>${user.username}</td>
-                    <td>${user.email}</td>
                     <td>
                         <span class="badge badge-${user.role === 'ADMIN' ? 'danger' : 'info'}">
                             ${user.role}
@@ -594,7 +593,6 @@ class AdminPanel {
         try {
             const settings = {
                 mallName: document.getElementById('mallName').value,
-                adminEmail: document.getElementById('adminEmail').value,
                 sessionTimeout: parseInt(document.getElementById('sessionTimeout').value),
                 enableLogging: document.getElementById('enableLogging').checked
             };

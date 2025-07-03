@@ -18,36 +18,85 @@ class AuthManager {
                 this.updateLoginStatus();
             }
         });
+        
+        // 验证现有token的有效性
+        this.validateExistingToken();
+    }
+
+    // 验证现有token
+    async validateExistingToken() {
+        const token = this.getToken();
+        if (token) {
+            console.log('验证现有token...');
+            try {
+                const response = await fetch(`${window.API_CONFIG.auth.baseUrl}/validate`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + token
+                    }
+                });
+                
+                if (!response.ok) {
+                    console.warn('Token验证失败，清除登录状态');
+                    this.logout();
+                } else {
+                    console.log('Token验证成功');
+                }
+            } catch (error) {
+                console.error('Token验证出错:', error);
+                // 网络错误时不自动清除token，可能是临时网络问题
+            }
+        }
     }
 
     // 检查是否已登录
     isLoggedIn() {
-        return localStorage.getItem(this.tokenKey) !== null;
+        const token = this.getToken();
+        const hasToken = !!token;
+        console.log('检查登录状态:', hasToken ? '已登录' : '未登录');
+        return hasToken;
     }
 
     // 获取用户信息
     getUser() {
         const userStr = localStorage.getItem(this.userKey);
-        return userStr ? JSON.parse(userStr) : null;
+        const user = userStr ? JSON.parse(userStr) : null;
+        console.log('获取用户信息:', user);
+        return user;
     }
 
     // 获取token
     getToken() {
-        return localStorage.getItem(this.tokenKey);
+        const token = localStorage.getItem(this.tokenKey);
+        console.log('获取token:', token ? token.substring(0, 20) + '...' : 'null');
+        return token;
     }
 
     // 设置登录状态
     setLogin(token, user) {
+        console.log('设置登录状态:', { token: token.substring(0, 20) + '...', user });
         localStorage.setItem(this.tokenKey, token);
         localStorage.setItem(this.userKey, JSON.stringify(user));
         this.updateLoginStatus();
+        
+        // 触发自定义事件，通知其他组件登录状态变化
+        window.dispatchEvent(new CustomEvent('loginStateChanged', {
+            detail: { isLoggedIn: true, user: user }
+        }));
     }
 
     // 清除登录状态
     logout() {
+        console.log('清除登录状态');
         localStorage.removeItem(this.tokenKey);
         localStorage.removeItem(this.userKey);
         this.updateLoginStatus();
+        
+        // 触发自定义事件，通知其他组件登录状态变化
+        window.dispatchEvent(new CustomEvent('loginStateChanged', {
+            detail: { isLoggedIn: false, user: null }
+        }));
     }
 
     // 更新页面登录状态显示
@@ -75,7 +124,6 @@ class AuthManager {
                     <img src="https://img.jd.com/avatar.png" alt="头像" class="user-avatar">
                     <div class="user-details">
                         <div class="user-name">${user.nickname || user.username}</div>
-                        <div class="user-email">${user.email || ''}</div>
                     </div>
                 </div>
                 <div class="menu-items">
@@ -188,6 +236,7 @@ class AuthManager {
         }
 
         try {
+            console.log('尝试登录:', username);
             const response = await fetch(`${window.API_CONFIG.auth.baseUrl}/login`, {
                 method: 'POST',
                 headers: {
@@ -196,17 +245,28 @@ class AuthManager {
                 body: JSON.stringify({ username, password })
             });
 
+            console.log('登录响应状态:', response.status);
+
             if (response.ok) {
                 const data = await response.json();
+                console.log('登录成功:', data);
                 this.setLogin(data.token, data.user);
                 this.closeModal();
-                this.showMessage('登录成功！', 'success');
+                this.showMessage('登录成功', 'success');
+                
+                // 刷新页面或更新UI
+                if (window.location.pathname.includes('login.html')) {
+                    window.location.href = '../home/index.html';
+                } else {
+                    window.location.reload();
+                }
             } else {
                 const errorData = await response.json();
-                this.showMessage(errorData.message || '登录失败，请检查用户名和密码', 'error');
+                console.error('登录失败:', errorData);
+                this.showMessage(errorData.message || '登录失败', 'error');
             }
         } catch (error) {
-            console.error('登录错误:', error);
+            console.error('登录网络错误:', error);
             this.showMessage('网络错误，请稍后重试', 'error');
         }
     }
@@ -230,70 +290,71 @@ class AuthManager {
         }
 
         try {
+            console.log('尝试注册:', username);
             const response = await fetch(`${window.API_CONFIG.auth.baseUrl}/register`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ 
-                    username, 
-                    password,
-                    email: username + '@example.com',
-                    fullName: '用户' + username
-                })
+                body: JSON.stringify({ username, password })
             });
+
+            console.log('注册响应状态:', response.status);
 
             if (response.ok) {
                 const data = await response.json();
-                this.setLogin(data.token, data.user);
-                this.closeModal();
-                this.showMessage('注册成功！', 'success');
+                console.log('注册成功:', data);
+                this.showMessage('注册成功，请登录', 'success');
+                this.showLoginForm();
             } else {
                 const errorData = await response.json();
-                this.showMessage(errorData.message || '注册失败，请稍后重试', 'error');
+                console.error('注册失败:', errorData);
+                this.showMessage(errorData.message || '注册失败', 'error');
             }
         } catch (error) {
-            console.error('注册错误:', error);
+            console.error('注册网络错误:', error);
             this.showMessage('网络错误，请稍后重试', 'error');
         }
     }
 
     // 显示登录表单
     showLoginForm() {
-        const loginForm = document.getElementById('loginForm');
-        const registerForm = document.getElementById('registerForm');
-        
-        if (loginForm) loginForm.style.display = 'block';
-        if (registerForm) registerForm.style.display = 'none';
+        document.getElementById('loginForm').style.display = 'block';
+        document.getElementById('registerForm').style.display = 'none';
     }
 
     // 显示注册表单
     showRegisterForm() {
-        const loginForm = document.getElementById('loginForm');
-        const registerForm = document.getElementById('registerForm');
-        
-        if (loginForm) loginForm.style.display = 'none';
-        if (registerForm) registerForm.style.display = 'block';
+        document.getElementById('loginForm').style.display = 'none';
+        document.getElementById('registerForm').style.display = 'block';
     }
 
     // 显示模态框
     showModal(content) {
         // 移除现有的模态框
-        this.closeModal();
+        const existingModal = document.getElementById('authModal');
+        if (existingModal) {
+            existingModal.remove();
+        }
 
+        // 创建新的模态框
         const modal = document.createElement('div');
         modal.id = 'authModal';
-        modal.className = 'modal show';
-        modal.innerHTML = content;
-        
-        // 点击外部关闭
+        modal.className = 'modal-overlay';
+        modal.innerHTML = `
+            <div class="modal-content">
+                ${content}
+            </div>
+        `;
+
+        document.body.appendChild(modal);
+
+        // 点击背景关闭模态框
         modal.addEventListener('click', (e) => {
             if (e.target === modal) {
                 this.closeModal();
             }
         });
-
-        document.body.appendChild(modal);
     }
 
     // 关闭模态框
@@ -306,67 +367,63 @@ class AuthManager {
 
     // 显示消息
     showMessage(message, type = 'info') {
-        const messageDiv = document.createElement('div');
-        messageDiv.className = `message message-${type}`;
-        messageDiv.textContent = message;
-        messageDiv.style.cssText = `
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            padding: 12px 20px;
-            border-radius: 4px;
-            color: white;
-            font-weight: bold;
-            z-index: 10000;
-            background: ${type === 'success' ? '#52c41a' : type === 'error' ? '#ff4d4f' : '#1890ff'};
-        `;
+        // 创建消息元素
+        const messageEl = document.createElement('div');
+        messageEl.className = `message message-${type}`;
+        messageEl.textContent = message;
 
-        document.body.appendChild(messageDiv);
+        // 添加到页面
+        document.body.appendChild(messageEl);
 
+        // 3秒后自动移除
         setTimeout(() => {
-            messageDiv.remove();
+            if (messageEl.parentNode) {
+                messageEl.parentNode.removeChild(messageEl);
+            }
         }, 3000);
     }
 
-    // 页面跳转方法
+    // 跳转到个人中心
     goToProfile() {
         this.closeModal();
-        // TODO: 跳转到个人中心页面
-        this.showMessage('个人中心功能开发中...', 'info');
+        window.location.href = '../portal/portal.html';
     }
 
+    // 跳转到订单页面
     goToOrders() {
         this.closeModal();
-        // TODO: 跳转到订单页面
-        this.showMessage('订单页面功能开发中...', 'info');
+        this.showMessage('订单功能开发中...', 'info');
     }
 
+    // 跳转到购物车
     goToCart() {
         this.closeModal();
-        // TODO: 跳转到购物车页面
-        this.showMessage('购物车功能开发中...', 'info');
+        window.location.href = '../cart/cart.html';
     }
 
+    // 跳转到收藏页面
     goToFavorites() {
         this.closeModal();
-        // TODO: 跳转到收藏页面
         this.showMessage('收藏功能开发中...', 'info');
     }
 }
 
-// 创建全局实例
-const authManager = new AuthManager();
-
-// 全局函数，供HTML调用
+// 全局函数
 function showLoginModal() {
-    authManager.showLoginModal();
+    if (window.authManager) {
+        window.authManager.showLoginModal();
+    }
 }
 
 function showUserMenu() {
-    authManager.showUserMenu();
+    if (window.authManager) {
+        window.authManager.showUserMenu();
+    }
 }
 
 function logout() {
-    authManager.logout();
-    authManager.showMessage('已退出登录', 'success');
+    if (window.authManager) {
+        window.authManager.logout();
+        window.location.reload();
+    }
 } 

@@ -1,3 +1,17 @@
+/* 覆盖Bootstrap的平滑滚动设置 */
+html {
+    scroll-behavior: auto !important;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    color: #333;
+    background-color: #f8f9fa;
+}
+
 /* 自定义样式 - 与Bootstrap配合 */
 
 /* 全局样式 */
@@ -138,90 +152,52 @@ header .navbar-nav .nav-link:hover {
 
 /* 商品卡片样式 */
 .product-card {
-    transition: transform .2s, box-shadow .2s;
-    border: none;
-    border-radius: .5rem;
-    overflow: hidden;
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    border: 1px solid #e0e0e0;
 }
 
 .product-card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 .5rem 1rem rgba(0,0,0,.15);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
 }
 
-.product-card .card-img-top {
+.card-img-top-container {
+    position: relative;
+    overflow: hidden;
     height: 200px;
+}
+
+.card-img-top {
+    width: 100%;
+    height: 100%;
     object-fit: cover;
+    transition: transform 0.3s ease;
 }
 
-.product-info {
-    padding: 1.5rem;
+.product-card:hover .card-img-top {
+    transform: scale(1.05);
 }
 
-.product-name {
-    font-size: 1.1rem;
+.card-title {
+    font-size: 1rem;
     font-weight: 600;
     margin-bottom: 0.5rem;
-    color: #212529;
+    line-height: 1.3;
+    height: 2.6em;
+    overflow: hidden;
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
-    overflow: hidden;
 }
 
-.product-description {
-    color: #6c757d;
-    font-size: 0.9rem;
-    margin-bottom: 1rem;
+.card-text {
+    font-size: 0.875rem;
+    line-height: 1.4;
+    height: 2.8em;
+    overflow: hidden;
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
-    overflow: hidden;
-}
-
-.product-meta {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1rem;
-}
-
-.product-brand, .product-category {
-    background: #f8f9fa;
-    padding: 0.25rem 0.75rem;
-    border-radius: 20px;
-    font-size: 0.8rem;
-    color: #6c757d;
-}
-
-.product-price {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-}
-
-.current-price {
-    font-size: 1.2rem;
-    font-weight: 700;
-    color: #dc3545;
-}
-
-.original-price {
-    font-size: 0.9rem;
-    color: #6c757d;
-    text-decoration: line-through;
-}
-
-.product-actions {
-    display: flex;
-    gap: 0.5rem;
-    margin-top: 1rem;
-}
-
-.product-actions .btn {
-    flex: 1;
-    font-size: 0.9rem;
-    padding: 0.5rem 1rem;
 }
 
 /* 登录区域样式 */
@@ -250,11 +226,6 @@ header .navbar-nav .nav-link:hover {
 .user-name {
     font-weight: 600;
     margin-bottom: 0.25rem;
-}
-
-.user-email {
-    font-size: 0.9rem;
-    color: #6c757d;
 }
 
 .menu-items {
@@ -558,8 +529,20 @@ footer p {
     margin-bottom: 5px;
 }
 
+/* 回到顶部按钮特殊样式 */
 #back-to-top {
-    display: none; /* Initially hidden */
+    display: none; /* 初始隐藏，由JavaScript控制 */
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border-bottom: none !important; /* 移除底部边框 */
+}
+
+#back-to-top:hover {
+    background-color: #0056b3 !important;
+    color: #fff !important;
+    transform: translateY(-2px);
 }
 
 /* 分类展示专用样式 */
@@ -811,3 +794,89 @@ footer p {
 .category-sections section:nth-child(4) { animation-delay: 0.4s; }
 .category-sections section:nth-child(5) { animation-delay: 0.5s; }
 .category-sections section:nth-child(6) { animation-delay: 0.6s; }
+
+/* 首页推荐商品样式 */
+.product-card {
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    border: 1px solid #e0e0e0;
+}
+
+.product-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.card-img-top-container {
+    position: relative;
+    overflow: hidden;
+    height: 200px;
+}
+
+.card-img-top {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.product-card:hover .card-img-top {
+    transform: scale(1.05);
+}
+
+.card-title {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    line-height: 1.3;
+    height: 2.6em;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+}
+
+.card-text {
+    font-size: 0.875rem;
+    line-height: 1.4;
+    height: 2.8em;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+}
+
+/* 推荐商品区域样式 */
+#homepage-products .card {
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+#homepage-products .card-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: none;
+    padding: 1rem 1.5rem;
+}
+
+#homepage-products .card-header h4 {
+    font-size: 1.25rem;
+    font-weight: 600;
+}
+
+/* 响应式调整 */
+@media (max-width: 768px) {
+    #homepage-products .col-lg-3 {
+        margin-bottom: 1rem;
+    }
+    
+    .card-img-top-container {
+        height: 150px;
+    }
+    
+    .card-title {
+        font-size: 0.9rem;
+    }
+    
+    .card-text {
+        font-size: 0.8rem;
+    }
+}

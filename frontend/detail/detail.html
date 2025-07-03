@@ -248,6 +248,26 @@
         </div>
     </main>
 
+    <!-- Fixed Right Sidebar -->
+    <div class="fixed-sidebar">
+        <a href="../portal/portal.html" class="sidebar-item" title="个人中心">
+            <i class="fas fa-user"></i>
+            <span>个人中心</span>
+        </a>
+        <a href="../cart/cart.html" class="sidebar-item" title="购物车">
+            <i class="fas fa-shopping-cart"></i>
+            <span>购物车</span>
+        </a>
+        <a href="#" class="sidebar-item" title="联系客服">
+            <i class="fas fa-headset"></i>
+            <span>客服</span>
+        </a>
+        <a href="#" class="sidebar-item" id="back-to-top" title="回到顶部">
+            <i class="fas fa-arrow-up"></i>
+            <span>回顶部</span>
+        </a>
+    </div>
+
     <!-- 登录模态框 -->
     <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -308,17 +328,11 @@
         <!-- Toasts will be appended here -->
     </div>
 
-    <!-- 返回顶部按钮 -->
-    <button id="backToTop" class="btn btn-success position-fixed bottom-0 end-0 m-3" style="display: none; z-index: 1000;" onclick="scrollToTop()">
-        <i class="fas fa-arrow-up"></i>
-    </button>
-
     <!-- Bootstrap JS -->
     <script src="../libs/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="../js/api-config.js"></script>
     <script src="../js/auth.js"></script>
     <script src="../js/cart-api.js"></script>
-    <script src="../js/cart-manager.js"></script>
     <script src="detail.js"></script>
 </body>
 </html> 

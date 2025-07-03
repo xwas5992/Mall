@@ -67,15 +67,35 @@ class ProductDetail {
             });
         }
 
-        // 返回顶部按钮
+        // 侧边栏回到顶部按钮
         window.addEventListener('scroll', () => {
-            const backToTopBtn = document.getElementById('backToTop');
-            if (window.pageYOffset > 300) {
-                backToTopBtn.style.display = 'block';
-            } else {
-                backToTopBtn.style.display = 'none';
+            const backToTopBtn = document.getElementById('back-to-top');
+            if (backToTopBtn) {
+                if (window.pageYOffset > 300) {
+                    backToTopBtn.style.display = 'flex';
+                } else {
+                    backToTopBtn.style.display = 'none';
+                }
             }
         });
+
+        // 侧边栏回到顶部按钮点击事件
+        const backToTopBtn = document.getElementById('back-to-top');
+        if (backToTopBtn) {
+            backToTopBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                this.scrollToTop();
+            });
+        }
+
+        // 侧边栏客服按钮点击事件
+        const customerServiceBtn = document.querySelector('.sidebar-item[title="联系客服"]');
+        if (customerServiceBtn) {
+            customerServiceBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                this.showCustomerService();
+            });
+        }
     }
 
     // 加载商品详情
@@ -719,31 +739,53 @@ class ProductDetail {
         document.getElementById('error-message').textContent = message;
     }
 
+    // 显示Toast消息
     showToast(message, type = 'success') {
         const toastContainer = document.getElementById('toast-container');
-        const toastId = 'toast-' + Date.now();
-        
-        const toastHtml = `
-            <div id="${toastId}" class="toast align-items-center text-white bg-${type === 'error' ? 'danger' : 'success'} border-0" role="alert">
-                <div class="d-flex">
-                    <div class="toast-body">
-                        ${message}
-                    </div>
-                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+        if (!toastContainer) return;
+
+        const toast = document.createElement('div');
+        toast.className = `toast align-items-center text-white bg-${type} border-0`;
+        toast.setAttribute('role', 'alert');
+        toast.setAttribute('aria-live', 'assertive');
+        toast.setAttribute('aria-atomic', 'true');
+
+        toast.innerHTML = `
+            <div class="d-flex">
+                <div class="toast-body">
+                    <i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'} me-2"></i>
+                    ${message}
                 </div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
             </div>
         `;
-        
-        toastContainer.insertAdjacentHTML('beforeend', toastHtml);
-        
-        const toastElement = document.getElementById(toastId);
-        const toast = new bootstrap.Toast(toastElement);
-        toast.show();
-        
-        // 自动移除toast元素
-        toastElement.addEventListener('hidden.bs.toast', () => {
-            toastElement.remove();
+
+        toastContainer.appendChild(toast);
+
+        const bsToast = new bootstrap.Toast(toast, {
+            autohide: true,
+            delay: 3000
         });
+
+        bsToast.show();
+
+        // 自动移除
+        toast.addEventListener('hidden.bs.toast', () => {
+            toastContainer.removeChild(toast);
+        });
+    }
+
+    // 滚动到顶部
+    scrollToTop() {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    }
+
+    // 显示客服对话框
+    showCustomerService() {
+        this.showToast('客服功能正在开发中，请稍后使用', 'info');
     }
 }
 
@@ -756,43 +798,50 @@ function searchProducts() {
 }
 
 function switchTab(tabName) {
+    // 移除所有活动状态
     document.querySelectorAll('.tab-btn').forEach(btn => {
         btn.classList.remove('active');
     });
-    event.target.classList.add('active');
-
-    document.querySelectorAll('.tab-panel').forEach(panel => {
-        panel.classList.remove('active');
-    });
-    document.getElementById(`${tabName}-panel`).classList.add('active');
+    
+    // 添加活动状态到当前标签
+    const activeTab = document.getElementById(`${tabName}-tab`);
+    if (activeTab) {
+        activeTab.classList.add('active');
+    }
 }
 
 function increaseQuantity() {
-    if (window.productDetail) {
-        window.productDetail.increaseQuantity();
+    const input = document.getElementById('quantityInput');
+    const currentValue = parseInt(input.value) || 1;
+    if (currentValue < 99) {
+        input.value = currentValue + 1;
+        input.dispatchEvent(new Event('change'));
     }
 }
 
 function decreaseQuantity() {
-    if (window.productDetail) {
-        window.productDetail.decreaseQuantity();
+    const input = document.getElementById('quantityInput');
+    const currentValue = parseInt(input.value) || 1;
+    if (currentValue > 1) {
+        input.value = currentValue - 1;
+        input.dispatchEvent(new Event('change'));
     }
 }
 
 function addToCart() {
-    if (window.productDetail) {
-        window.productDetail.addToCart();
+    if (window.productDetailInstance) {
+        window.productDetailInstance.addToCart();
     }
 }
 
 function buyNow() {
-    if (window.productDetail) {
-        window.productDetail.buyNow();
+    if (window.productDetailInstance) {
+        window.productDetailInstance.buyNow();
     }
 }
 
 function checkout() {
-    window.location.href = '../cart/cart.html?checkout=true';
+    window.location.href = '../cart/cart.html';
 }
 
 function scrollToTop() {
@@ -805,27 +854,16 @@ function scrollToTop() {
 function logout() {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
-    location.reload();
+    window.location.reload();
 }
 
-// 从购物车移除商品
 function removeFromCart(itemId) {
-    if (window.CartAPI) {
-        window.CartAPI.removeCart(itemId).then(res => {
-            if (window.productDetail) {
-                window.productDetail.loadCartDisplay();
-                window.productDetail.updateCartBadge();
-            }
-            if (res && res.success !== false) {
-                showToast('商品已从购物车移除', 'success');
-            } else {
-                showToast(res.message || '移除失败', 'error');
-            }
-        });
+    if (window.productDetailInstance) {
+        window.productDetailInstance.removeFromCart(itemId);
     }
 }
 
 // 页面加载完成后初始化
 document.addEventListener('DOMContentLoaded', function() {
-    window.productDetail = new ProductDetail();
+    window.productDetailInstance = new ProductDetail();
 }); 

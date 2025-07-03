@@ -1188,11 +1188,6 @@ body {
   margin-bottom: 0.25rem;
 }
 
-.user-email {
-  font-size: 0.9rem;
-  color: #6c757d;
-}
-
 .menu-items {
   padding: 0.5rem 0;
 }
@@ -1405,4 +1400,80 @@ body {
 /* 如果需要搜索框占满剩余空间 */
 /* .d-flex.flex-grow-1.mx-4 {
     justify-content: flex-start;
-} */ 
+} */
+
+/* 排序相关样式 */
+.product-rating {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.product-rating .fas.fa-star,
+.product-rating .fas.fa-star-half-alt {
+    color: #ffc107;
+}
+
+.product-rating .far.fa-star {
+    color: #dee2e6;
+}
+
+.sort-option {
+    transition: all 0.2s ease;
+}
+
+.sort-option:hover {
+    background-color: #f8f9fa;
+}
+
+.sort-option input[type="radio"]:checked + label {
+    color: #198754;
+    font-weight: 600;
+}
+
+/* 排序图标样式 */
+.sort-icon {
+    width: 16px;
+    height: 16px;
+    display: inline-block;
+    margin-right: 0.5rem;
+}
+
+/* 商品卡片增强样式 */
+.product-card {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.product-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.product-card .card-title {
+    font-size: 1rem;
+    font-weight: 600;
+    line-height: 1.4;
+    margin-bottom: 0.5rem;
+}
+
+.product-card .card-text {
+    font-size: 0.875rem;
+    line-height: 1.4;
+}
+
+.product-meta {
+    font-size: 0.75rem;
+}
+
+/* 响应式排序选项 */
+@media (max-width: 768px) {
+    .form-check-label {
+        font-size: 0.875rem;
+    }
+    
+    .product-rating {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.25rem;
+    }
+} 

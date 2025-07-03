@@ -39,7 +39,6 @@
     "user": {
       "id": 1,
       "username": "admin",
-      "email": "admin@example.com",
       "role": "ADMIN"
     }
   }
@@ -54,15 +53,14 @@
   {
     "username": "newuser",
     "password": "password",
-    "email": "user@example.com",
     "fullName": "张三"
   }
   ```
 
 #### 3. 发送验证码
 - **URL**: `POST /api/auth/send-code`
-- **描述**: 向指定邮箱发送验证码
-- **参数**: `email` (邮箱地址)
+- **描述**: 向指定手机号发送验证码
+- **参数**: `phone` (手机号)
 
 #### 4. 验证Token
 - **URL**: `GET /api/auth/verify`
@@ -74,7 +72,6 @@
     "valid": true,
     "username": "admin",
     "role": "ADMIN",
-    "email": "admin@example.com",
     "fullName": "管理员"
   }
   ```
@@ -286,8 +283,7 @@
   ```json
   {
     "username": "user",
-    "password": "password",
-    "email": "user@example.com"
+    "password": "password"
   }
   ```
 

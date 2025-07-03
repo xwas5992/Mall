@@ -1,5 +1,6 @@
 package com.mall.userservice;
 
+import com.mall.userservice.dto.UserUpdateRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -42,6 +43,47 @@ public class UserController {
     @Operation(summary = "获取用户列表", description = "获取所有用户列表")
     public ResponseEntity<List<User>> list() {
         return ResponseEntity.ok(userService.findAll());
+    }
+    
+    @GetMapping("/{id}")
+    @Operation(summary = "获取用户信息", description = "根据ID获取用户详细信息")
+    public ResponseEntity<User> getUserById(
+            @Parameter(description = "用户ID") @PathVariable Long id) {
+        User user = userService.findById(id);
+        if (user != null) {
+            return ResponseEntity.ok(user);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+    
+    @GetMapping("/profile/{username}")
+    @Operation(summary = "获取用户信息", description = "根据用户名获取用户详细信息")
+    public ResponseEntity<User> getUserByUsername(
+            @Parameter(description = "用户名") @PathVariable String username) {
+        User user = userService.findByUsername(username);
+        if (user != null) {
+            return ResponseEntity.ok(user);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+    
+    @PutMapping("/{id}")
+    @Operation(summary = "更新用户信息", description = "更新用户个人信息")
+    public ResponseEntity<?> updateUserInfo(
+            @Parameter(description = "用户ID") @PathVariable Long id,
+            @Parameter(description = "用户信息更新请求") @RequestBody UserUpdateRequest request) {
+        try {
+            User updatedUser = userService.updateUserInfo(id, request);
+            return ResponseEntity.ok(updatedUser);
+        } catch (RuntimeException e) {
+            Map<String, Object> errorResponse = new HashMap<>();
+            errorResponse.put("error", true);
+            errorResponse.put("message", e.getMessage());
+            errorResponse.put("timestamp", System.currentTimeMillis());
+            return ResponseEntity.badRequest().body(errorResponse);
+        }
     }
 
     @GetMapping("/health")

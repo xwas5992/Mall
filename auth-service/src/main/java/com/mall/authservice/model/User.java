@@ -1,7 +1,6 @@
 package com.mall.authservice.model;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
@@ -21,15 +20,17 @@ public class User {
     @Column(unique = true)
     private String username;
 
+    @Column(unique = true)
+    private String phone;
+
     @NotBlank
     private String password;
 
-    @NotBlank
-    @Email
-    @Column(unique = true)
-    private String email;
-
     private String fullName;
+
+    private String nickname;
+
+    private String avatar;
 
     @Enumerated(EnumType.STRING)
     private UserRole role = UserRole.USER;

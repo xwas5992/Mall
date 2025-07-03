@@ -21,7 +21,8 @@ document.addEventListener('DOMContentLoaded', function() {
     let needsSearch = false;
 
     if (keyword) {
-        document.getElementById('searchInput').value = keyword;
+        // 不设置搜索框的值，但保存关键词用于搜索
+        currentKeyword = keyword;
         needsSearch = true;
     }
     
@@ -78,17 +79,28 @@ function setupEventListeners() {
     // 筛选条件变化事件
     const categoryRadios = document.querySelectorAll('input[name="category"]');
     categoryRadios.forEach(radio => {
-        radio.addEventListener('change', performSearch);
+        radio.addEventListener('change', function() {
+            // 当用户选择分类时，清除之前的关键词搜索
+            currentKeyword = '';
+            performSearch();
+        });
     });
     
     const priceRadios = document.querySelectorAll('input[name="price"]');
     priceRadios.forEach(radio => {
-        radio.addEventListener('change', performSearch);
+        radio.addEventListener('change', function() {
+            // 当用户选择价格筛选时，清除之前的关键词搜索
+            currentKeyword = '';
+            performSearch();
+        });
     });
     
     const sortRadios = document.querySelectorAll('input[name="sort"]');
     sortRadios.forEach(radio => {
-        radio.addEventListener('change', performSearch);
+        radio.addEventListener('change', function() {
+            // 排序变化时不清除关键词，只执行搜索
+            performSearch();
+        });
     });
     
     // 视图切换按钮
@@ -249,13 +261,18 @@ async function loadAllProducts() {
 }
 
 // 执行搜索
-async function performSearch() {
+async function performSearch(resetPage = true) {
     const searchInput = document.getElementById('searchInput');
     const categoryRadios = document.querySelectorAll('input[name="category"]:checked');
     const priceRadios = document.querySelectorAll('input[name="price"]:checked');
     const sortRadios = document.querySelectorAll('input[name="sort"]:checked');
     
-    const keyword = searchInput ? searchInput.value.trim() : '';
+    // 获取搜索框中的关键词
+    const inputKeyword = searchInput ? searchInput.value.trim() : '';
+    
+    // 如果搜索框有内容，使用搜索框的关键词；否则使用保存的关键词
+    const keyword = inputKeyword || currentKeyword;
+    
     const categoryId = categoryRadios.length > 0 ? categoryRadios[0].value : '';
     const priceRange = priceRadios.length > 0 ? priceRadios[0].value : '';
     const sortBy = sortRadios.length > 0 ? sortRadios[0].value : 'default';
@@ -282,8 +299,10 @@ async function performSearch() {
         sortBy: sortBy || 'default'
     };
     
-    // 重置页码
-    currentPage = 0;
+    // 只有在重置页码时才重置为0
+    if (resetPage) {
+        currentPage = 0;
+    }
     
     showLoading();
     
@@ -294,10 +313,12 @@ async function performSearch() {
         if (categoryId) params.append('categoryId', categoryId);
         if (minPrice !== null) params.append('minPrice', minPrice);
         if (maxPrice !== null) params.append('maxPrice', maxPrice);
+        if (sortBy && sortBy !== 'default') params.append('sortBy', sortBy);
         params.append('page', currentPage);
         params.append('size', 12);
         
         console.log('搜索参数:', params.toString());
+        console.log('当前页码:', currentPage);
         console.log('API地址:', `${window.API_CONFIG.product.baseUrl}/search/filters?${params.toString()}`);
         
         // 使用正确的API配置
@@ -319,6 +340,10 @@ async function performSearch() {
         
         const data = await response.json();
         console.log('搜索结果数据:', data);
+        
+        // 移除前端排序逻辑，完全依赖后端排序
+        // 后端已经根据sortBy参数进行了正确的排序
+        
         displaySearchResults(data);
         
     } catch (error) {
@@ -347,14 +372,49 @@ function displaySearchResults(data) {
     
     // 更新搜索标题和面包屑
     if (searchTitle) {
-        if (currentKeyword || currentFilters.categoryId || currentFilters.minPrice !== null || currentFilters.maxPrice !== null) {
-            searchTitle.textContent = '搜索结果';
-            updateBreadcrumb('商品搜索');
-            updatePageTitle('商品搜索');
+        if (currentKeyword || currentFilters.categoryId || currentFilters.minPrice !== null || currentFilters.maxPrice !== null || (currentFilters.sortBy && currentFilters.sortBy !== 'default')) {
+            // 如果有关键词，显示关键词信息
+            if (currentKeyword) {
+                const sortText = getSortText(currentFilters.sortBy);
+                searchTitle.textContent = `搜索"${currentKeyword}"的结果${sortText}`;
+                updateBreadcrumb(`搜索"${currentKeyword}"`);
+                updatePageTitle(`搜索"${currentKeyword}" - 农产品商城`);
+            } else if (currentFilters.categoryId) {
+                // 如果是分类筛选，显示分类信息
+                const categoryName = getCategoryName(currentFilters.categoryId);
+                const sortText = getSortText(currentFilters.sortBy);
+                searchTitle.textContent = `${categoryName}${sortText}`;
+                updateBreadcrumb(categoryName);
+                updatePageTitle(`${categoryName} - 农产品商城`);
+            } else if (currentFilters.minPrice !== null || currentFilters.maxPrice !== null) {
+                // 如果是价格筛选，显示价格信息
+                let priceText = '';
+                if (currentFilters.minPrice !== null && currentFilters.maxPrice !== null) {
+                    priceText = `¥${currentFilters.minPrice} - ¥${currentFilters.maxPrice}`;
+                } else if (currentFilters.minPrice !== null) {
+                    priceText = `¥${currentFilters.minPrice}以上`;
+                } else if (currentFilters.maxPrice !== null) {
+                    priceText = `¥${currentFilters.maxPrice}以下`;
+                }
+                const sortText = getSortText(currentFilters.sortBy);
+                searchTitle.textContent = `价格${priceText}的商品${sortText}`;
+                updateBreadcrumb(`价格筛选`);
+                updatePageTitle(`价格筛选 - 农产品商城`);
+            } else if (currentFilters.sortBy && currentFilters.sortBy !== 'default') {
+                // 如果只是排序，显示排序信息
+                const sortText = getSortText(currentFilters.sortBy);
+                searchTitle.textContent = `所有商品${sortText}`;
+                updateBreadcrumb('所有商品');
+                updatePageTitle('所有商品 - 农产品商城');
+            } else {
+                searchTitle.textContent = '搜索结果';
+                updateBreadcrumb('商品搜索');
+                updatePageTitle('商品搜索 - 农产品商城');
+            }
         } else {
             searchTitle.textContent = '所有商品';
             updateBreadcrumb('所有商品');
-            updatePageTitle('所有商品');
+            updatePageTitle('所有商品 - 农产品商城');
         }
     }
     
@@ -407,7 +467,9 @@ function displayMockResults() {
             imageUrl: 'https://picsum.photos/300/200?random=1',
             category: '新鲜水果',
             brand: '优质品牌',
-            stock: 100
+            stock: 100,
+            rating: 4.5,
+            sales: 256
         },
         {
             id: 2,
@@ -417,7 +479,57 @@ function displayMockResults() {
             imageUrl: 'https://picsum.photos/300/200?random=2',
             category: '有机蔬菜',
             brand: '有机农场',
-            stock: 50
+            stock: 50,
+            rating: 4.2,
+            sales: 128
+        },
+        {
+            id: 3,
+            name: '优质大米',
+            description: '东北优质大米，粒粒饱满',
+            price: 25.90,
+            imageUrl: 'https://picsum.photos/300/200?random=3',
+            category: '粮油调味',
+            brand: '东北农场',
+            stock: 200,
+            rating: 4.8,
+            sales: 512
+        },
+        {
+            id: 4,
+            name: '新鲜鸡蛋',
+            description: '农家散养鸡蛋，营养丰富',
+            price: 12.80,
+            imageUrl: 'https://picsum.photos/300/200?random=4',
+            category: '肉禽蛋奶',
+            brand: '农家乐',
+            stock: 150,
+            rating: 4.6,
+            sales: 384
+        },
+        {
+            id: 5,
+            name: '深海带鱼',
+            description: '新鲜深海带鱼，肉质鲜美',
+            price: 35.60,
+            imageUrl: 'https://picsum.photos/300/200?random=5',
+            category: '水产海鲜',
+            brand: '海洋渔业',
+            stock: 80,
+            rating: 4.3,
+            sales: 96
+        },
+        {
+            id: 6,
+            name: '坚果零食',
+            description: '混合坚果，营养美味',
+            price: 18.90,
+            imageUrl: 'https://picsum.photos/300/200?random=6',
+            category: '休闲零食',
+            brand: '健康零食',
+            stock: 120,
+            rating: 4.7,
+            sales: 320
         }
     ];
     
@@ -444,6 +556,11 @@ function createProductElement(product) {
     const stockStatus = stock > 0 ? '有货' : '缺货';
     const stockClass = stock > 0 ? 'text-success' : 'text-danger';
     
+    // 评分和销量信息
+    const rating = product.rating || 0;
+    const sales = product.sales || 0;
+    const ratingStars = generateRatingStars(rating);
+    
     productDiv.innerHTML = `
         <div class="card h-100 product-card">
             <img src="${imageUrl}" class="card-img-top" alt="${product.name}" 
@@ -456,6 +573,15 @@ function createProductElement(product) {
                     <small class="text-muted">
                         <i class="fas fa-tag me-1"></i>${product.category || '未分类'}
                         <i class="fas fa-copyright ms-2 me-1"></i>${product.brand || '未知品牌'}
+                    </small>
+                </div>
+                <div class="product-rating mb-2">
+                    <small class="text-warning">
+                        ${ratingStars}
+                        <span class="text-muted ms-1">${rating.toFixed(1)}</span>
+                        <span class="text-muted ms-2">
+                            <i class="fas fa-fire me-1"></i>销量 ${sales}
+                        </span>
                     </small>
                 </div>
                 <div class="d-flex justify-content-between align-items-center mb-2">
@@ -527,7 +653,7 @@ function displayPagination() {
 // 跳转到指定页面
 async function goToPage(page) {
     currentPage = page;
-    await performSearch();
+    await performSearch(false); // 不重置页码
     window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
@@ -739,4 +865,59 @@ function updateBreadcrumb(text) {
 // 更新页面标题
 function updatePageTitle(text) {
     document.title = `${text} - 农产品商城`;
+}
+
+// 获取分类名称
+function getCategoryName(categoryId) {
+    const categories = [
+        { id: 1, name: '新鲜水果' },
+        { id: 2, name: '有机蔬菜' },
+        { id: 3, name: '粮油调味' },
+        { id: 4, name: '肉禽蛋奶' },
+        { id: 5, name: '水产海鲜' },
+        { id: 6, name: '休闲零食' }
+    ];
+    const category = categories.find(c => c.id === categoryId);
+    return category ? category.name : '未知分类';
+}
+
+// 获取排序文本
+function getSortText(sortBy) {
+    const sortTexts = {
+        'default': '',
+        'price-asc': '（价格从低到高）',
+        'price-desc': '（价格从高到低）',
+        'sales': '（销量优先）',
+        'rating': '（评分最高）',
+        'newest': '（最新上架）',
+        'name-asc': '（名称A-Z）',
+        'name-desc': '（名称Z-A）'
+    };
+    return sortTexts[sortBy] || '';
+}
+
+// 生成评分星星
+function generateRatingStars(rating) {
+    const fullStars = Math.floor(rating);
+    const hasHalfStar = rating % 1 >= 0.5;
+    const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
+    
+    let stars = '';
+    
+    // 实心星星
+    for (let i = 0; i < fullStars; i++) {
+        stars += '<i class="fas fa-star"></i>';
+    }
+    
+    // 半星
+    if (hasHalfStar) {
+        stars += '<i class="fas fa-star-half-alt"></i>';
+    }
+    
+    // 空心星星
+    for (let i = 0; i < emptyStars; i++) {
+        stars += '<i class="far fa-star"></i>';
+    }
+    
+    return stars;
 } 

@@ -19,4 +19,9 @@ public class ProductResponse {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private Integer categoryId;
+    
+    // 排序相关字段
+    private Integer sales;
+    private BigDecimal rating;
+    private LocalDateTime createTime;
 } 

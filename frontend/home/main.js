@@ -15,6 +15,109 @@ document.addEventListener('DOMContentLoaded', function() {
   ];
   const productList = document.getElementById('product-list');
 
+  // 加载首页推荐商品
+  async function loadHomepageProducts() {
+    try {
+      console.log('正在加载首页推荐商品...');
+      
+      const response = await fetch(`${window.API_CONFIG.product.homepageUrl}/products`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        }
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+      }
+
+      const products = await response.json();
+      console.log('首页商品数据:', products);
+      
+      renderHomepageProducts(products);
+    } catch (error) {
+      console.error('加载首页商品失败:', error);
+      showHomepageError();
+    }
+  }
+
+  // 渲染首页商品
+  function renderHomepageProducts(products) {
+    const container = document.getElementById('homepage-products');
+    if (!container) return;
+
+    if (!products || products.length === 0) {
+      container.innerHTML = `
+        <div class="col-12 text-center">
+          <div class="alert alert-info">
+            <i class="fas fa-info-circle me-2"></i>
+            暂无推荐商品，请稍后再来查看
+          </div>
+        </div>
+      `;
+      return;
+    }
+
+    container.innerHTML = products.map(product => `
+      <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+        <div class="card h-100 product-card">
+          <div class="card-img-top-container">
+            <img src="${product.imageUrl || 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDMwMCAyMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIzMDAiIGhlaWdodD0iMjAwIiBmaWxsPSIjRjVGNUY1Ii8+CjxwYXRoIGQ9Ik05MCA5MEgyMTBWMjEwSDkwVjkwWiIgc3Ryb2tlPSIjQ0NDIiBzdHJva2Utd2lkdGg9IjMiLz4KPHBhdGggZD0iTTkwIDkwTDIxMCAyMTAiIHN0cm9rZT0iI0NDQyIgc3Ryb2tlLXdpZHRoPSIzIi8+CjxwYXRoIGQ9Ik0yMTAgOTBMMTAgMjEwIiBzdHJva2U9IiNDQ0MiIHN0cm9rZS13aWR0aD0iMyIvPgo8L3N2Zz4K'}" 
+                 class="card-img-top" 
+                 alt="${product.homepageDisplayTitle || product.name}"
+                 onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDMwMCAyMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIzMDAiIGhlaWdodD0iMjAwIiBmaWxsPSIjRjVGNUY1Ii8+CjxwYXRoIGQ9Ik05MCA5MEgyMTBWMjEwSDkwVjkwWiIgc3Ryb2tlPSIjQ0NDIiBzdHJva2Utd2lkdGg9IjMiLz4KPHBhdGggZD0iTTkwIDkwTDIxMCAyMTAiIHN0cm9rZT0iI0NDQyIgc3Ryb2tlLXdpZHRoPSIzIi8+CjxwYXRoIGQ9Ik0yMTAgOTBMMTAgMjEwIiBzdHJva2U9IiNDQ0MiIHN0cm9rZS13aWR0aD0iMyIvPgo8L3N2Zz4K'">
+          </div>
+          <div class="card-body d-flex flex-column">
+            <h6 class="card-title">${product.homepageDisplayTitle || product.name}</h6>
+            <p class="card-text text-muted small">${product.homepageDisplayDescription || product.description || '暂无描述'}</p>
+            <div class="mt-auto">
+              <div class="d-flex justify-content-between align-items-center mb-2">
+                <span class="text-danger fw-bold">¥${formatPrice(product.price)}</span>
+                <span class="badge bg-success">推荐</span>
+              </div>
+              <div class="d-grid gap-2">
+                <button class="btn btn-primary btn-sm" onclick="addToCartFromHome(${product.id}, '${product.name}', ${product.price}, '${product.imageUrl || ''}', ${product.stock || 0})">
+                  <i class="fas fa-shopping-cart me-1"></i>加入购物车
+                </button>
+                <button class="btn btn-outline-primary btn-sm" onclick="window.location.href='../detail/detail.html?id=${product.id}'">
+                  <i class="fas fa-eye me-1"></i>查看详情
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  // 显示首页商品加载错误
+  function showHomepageError() {
+    const container = document.getElementById('homepage-products');
+    if (!container) return;
+
+    container.innerHTML = `
+      <div class="col-12 text-center">
+        <div class="alert alert-warning">
+          <i class="fas fa-exclamation-triangle me-2"></i>
+          加载推荐商品失败，请刷新页面重试
+        </div>
+      </div>
+    `;
+  }
+
+  // 格式化价格显示
+  function formatPrice(price) {
+    if (price === null || price === undefined) {
+      return '0.00';
+    }
+    const numPrice = typeof price === 'string' ? parseFloat(price) : price;
+    return isNaN(numPrice) ? '0.00' : numPrice.toFixed(2);
+  }
+
+  // 初始化时加载首页商品
+  loadHomepageProducts();
+
   // 登录注册/我的弹框逻辑
   let isLogin = localStorage.getItem('token') !== null;
   const loginArea = document.getElementById('loginArea');
@@ -122,15 +225,6 @@ document.addEventListener('DOMContentLoaded', function() {
   // 商品分类展示 - 优化后的数据获取逻辑
   const categorySectionsContainer = document.getElementById('category-sections');
   if (categorySectionsContainer) {
-    // 格式化价格显示（与搜索页保持一致）
-    function formatPrice(price) {
-      if (price === null || price === undefined) {
-        return '0.00';
-      }
-      const numPrice = typeof price === 'string' ? parseFloat(price) : price;
-      return isNaN(numPrice) ? '0.00' : numPrice.toFixed(2);
-    }
-
     // 获取分类商品数据（参考搜索页的API调用方式）
     async function fetchProductsForCategory(categoryId) {
       try {
@@ -349,10 +443,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
     backToTopButton.addEventListener('click', (e) => {
       e.preventDefault();
-      window.scrollTo({
-        top: 0,
-        behavior: 'smooth'
-      });
+      e.stopPropagation(); // 阻止事件冒泡
+      
+      // 直接跳转到顶部
+      window.scrollTo(0, 0);
     });
 
     // Initial check in case the page is already scrolled
@@ -397,11 +491,12 @@ function setupEventListeners() {
       }
     });
 
-    backToTopBtn.addEventListener('click', function() {
-      window.scrollTo({
-        top: 0,
-        behavior: 'smooth'
-      });
+    backToTopBtn.addEventListener('click', function(e) {
+      e.preventDefault();
+      e.stopPropagation(); // 阻止事件冒泡
+      
+      // 直接跳转到顶部
+      window.scrollTo(0, 0);
     });
   }
 }
@@ -531,6 +626,15 @@ function showLoginModal() {
 
 // 更新购物车徽章
 async function updateCartBadge() {
+  if (!isUserLoggedIn()) {
+    // 未登录，购物车徽章清空
+    const cartBadge = document.getElementById('cartBadge');
+    if (cartBadge) {
+      cartBadge.textContent = '';
+      cartBadge.style.display = 'none';
+    }
+    return;
+  }
   if (window.CartAPI) {
     const cart = await window.CartAPI.getCart();
     const totalQuantity = cart.reduce((sum, item) => sum + item.quantity, 0);

@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/product-service/api/homepage")
+@RequestMapping("/api/homepage")
 @RequiredArgsConstructor
 @Tag(name = "首页商品管理", description = "管理首页展示的商品")
 public class HomepageProductController {

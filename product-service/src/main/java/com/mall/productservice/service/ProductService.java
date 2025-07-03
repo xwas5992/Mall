@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -32,6 +33,10 @@ public class ProductService {
         product.setCategoryId(request.getCategoryId());
         product.setImageUrl(request.getImageUrl());
         product.setStatus(request.getStatus());
+        
+        // 设置排序相关字段的默认值
+        product.setSales(0);
+        product.setRating(BigDecimal.valueOf(5.0));
         
         return productRepository.save(product);
     }

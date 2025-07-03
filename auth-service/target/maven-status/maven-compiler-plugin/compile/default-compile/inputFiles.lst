@@ -8,6 +8,9 @@ D:\Code\Mall\auth-service\src\main\java\com\mall\authservice\controller\AuthCont
 D:\Code\Mall\auth-service\src\main\java\com\mall\authservice\model\User.java
 D:\Code\Mall\auth-service\src\main\java\com\mall\authservice\dto\LoginRequest.java
 D:\Code\Mall\auth-service\src\main\java\com\mall\authservice\security\CustomUserDetailsService.java
+D:\Code\Mall\auth-service\src\main\java\com\mall\authservice\config\RedisConfig.java
 D:\Code\Mall\auth-service\src\main\java\com\mall\authservice\controller\GlobalExceptionHandler.java
 D:\Code\Mall\auth-service\src\main\java\com\mall\authservice\dto\AuthResponse.java
+D:\Code\Mall\auth-service\src\main\java\com\mall\authservice\config\RestTemplateConfig.java
 D:\Code\Mall\auth-service\src\main\java\com\mall\authservice\service\VerificationCodeService.java
+D:\Code\Mall\auth-service\src\main\java\com\mall\authservice\service\CacheService.java

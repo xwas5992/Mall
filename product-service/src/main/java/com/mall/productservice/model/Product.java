@@ -57,6 +57,17 @@ public class Product {
     @Column(name = "homepage_display_description", length = 200)
     private String homepageDisplayDescription; // 首页显示描述（可选，为空则使用商品描述）
     
+    // 排序相关字段
+    @Column(name = "sales", nullable = false)
+    private Integer sales = 0; // 销量
+    
+    @Column(name = "rating", precision = 3, scale = 2, nullable = false)
+    private BigDecimal rating = BigDecimal.valueOf(5.0); // 评分，默认5.0
+    
+    @CreationTimestamp
+    @Column(name = "create_time", nullable = false)
+    private LocalDateTime createTime; // 创建时间，用于最新排序
+    
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
