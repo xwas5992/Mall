@@ -378,8 +378,10 @@ class AdminPanel {
                     </td>
                     <td>
                         <div class="action-buttons">
-                            <button class="btn btn-sm btn-warning" onclick="adminPanel.toggleUserStatus(${user.id})">
-                                <i class="fas fa-ban"></i>
+                            <button class="btn btn-sm ${user.enabled ? 'btn-warning' : 'btn-success'}"
+                                    onclick="adminPanel.toggleUserStatus(${user.id}, ${user.enabled})"
+                                    title="${user.enabled ? '禁用' : '启用'}">
+                                <i class="fas ${user.enabled ? 'fa-ban' : 'fa-check'}"></i>
                             </button>
                             <button class="btn btn-sm btn-danger" onclick="adminPanel.deleteUser(${user.id})">
                                 <i class="fas fa-trash"></i>
@@ -639,10 +641,11 @@ class AdminPanel {
     }
 
     // 切换用户状态
-    async toggleUserStatus(id) {
+    async toggleUserStatus(id, enabled) {
         try {
             const token = localStorage.getItem('adminToken');
-            const response = await fetch(`${window.API_CONFIG.auth.baseUrl}/users/${id}/status?enabled=false`, {
+            const newStatus = !enabled;
+            const response = await fetch(`${window.API_CONFIG.auth.baseUrl}/users/${id}/status?enabled=${newStatus}`, {
                 method: 'PUT',
                 headers: {
                     'Authorization': `Bearer ${token}`,

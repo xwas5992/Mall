@@ -29,15 +29,15 @@ class AuthManager {
         if (token) {
             console.log('验证现有token...');
             try {
-                const response = await fetch(`${window.API_CONFIG.auth.baseUrl}/validate`, {
-                    method: 'POST',
+                const response = await fetch(`${window.API_CONFIG.auth.baseUrl}/verify`, {
+                    method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
                         'Authorization': 'Bearer ' + token
                     }
                 });
-                
-                if (!response.ok) {
+                const result = await response.json();
+                if (!result.valid) {
                     console.warn('Token验证失败，清除登录状态');
                     this.logout();
                 } else {
@@ -242,7 +242,7 @@ class AuthManager {
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ username, password })
+                body: JSON.stringify({ phone: username, password }) // 兼容后端用phone登录
             });
 
             console.log('登录响应状态:', response.status);
@@ -250,7 +250,10 @@ class AuthManager {
             if (response.ok) {
                 const data = await response.json();
                 console.log('登录成功:', data);
-                this.setLogin(data.token, data.user);
+                // 兼容后端返回结构
+                const token = data.token || data.accessToken || '';
+                const user = data.user || data.userInfo || data;
+                this.setLogin(token, user);
                 this.closeModal();
                 this.showMessage('登录成功', 'success');
                 

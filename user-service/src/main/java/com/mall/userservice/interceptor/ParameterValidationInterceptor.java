@@ -24,6 +24,11 @@ public class ParameterValidationInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         String path = request.getRequestURI();
         
+        // 排除地址相关的API，避免误拦截
+        if (path.contains("/address/")) {
+            return true;
+        }
+        
         // 检查是否包含ID参数
         if (path.contains("/{id}") || path.matches(".*/\\d+.*")) {
             String idParam = extractIdFromPath(path);

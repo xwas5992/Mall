@@ -104,8 +104,8 @@
                 
                 <form id="loginForm">
                     <div class="form-floating">
-                        <input type="text" class="form-control" id="username" placeholder="用户名" autocomplete="username" required>
-                        <label for="username">用户名</label>
+                        <input type="text" class="form-control" id="username" placeholder="手机号" autocomplete="username" required>
+                        <label for="username">手机号</label>
                     </div>
                     
                     <div class="form-floating">
@@ -187,7 +187,7 @@
                 const rememberMe = document.getElementById('rememberMe').checked;
 
                 if (!username || !password) {
-                    this.showAlert('请输入用户名和密码', 'warning');
+                    this.showAlert('请输入手机号和密码', 'warning');
                     return;
                 }
 
@@ -198,7 +198,7 @@
                         method: 'POST',
                         headers: window.API_FETCH_CONFIG.headers,
                         body: JSON.stringify({
-                            username: username,
+                            phone: username,
                             password: password
                         })
                     });
@@ -225,7 +225,7 @@
                             this.showAlert('权限不足，只有管理员可以访问', 'danger');
                         }
                     } else {
-                        this.showAlert(data.message || '登录失败，请检查用户名和密码', 'danger');
+                        this.showAlert(data.message || '登录失败，请检查手机号和密码', 'danger');
                     }
                 } catch (error) {
                     console.error('登录失败:', error);

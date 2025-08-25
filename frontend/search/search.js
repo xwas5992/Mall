@@ -729,10 +729,14 @@ async function addToCart(productId) {
     }
     // 获取商品卡片信息
     const productCard = document.querySelector(`button[onclick="addToCart(${productId})"]`).closest('.product-card');
-    const name = productCard.querySelector('.card-title').textContent;
-    const price = parseFloat(productCard.querySelector('.fs-5.text-danger.fw-bold').textContent.replace('¥', ''));
-    const image = productCard.querySelector('img').src;
-    const stockText = productCard.querySelector('.product-meta + .d-flex small').textContent;
+    const nameElem = productCard.querySelector('.card-title');
+    const priceElem = productCard.querySelector('.fs-5.text-danger.fw-bold');
+    const imageElem = productCard.querySelector('img');
+    const stockElem = productCard.querySelector('.product-meta + .d-flex small');
+    const name = nameElem ? nameElem.textContent : '';
+    const price = priceElem ? parseFloat(priceElem.textContent.replace('¥', '')) : 0;
+    const image = imageElem ? imageElem.src : '';
+    const stockText = stockElem ? stockElem.textContent : '';
     const stock = stockText.includes('有货') ? 99 : 0;
     const product = {
         id: productId,

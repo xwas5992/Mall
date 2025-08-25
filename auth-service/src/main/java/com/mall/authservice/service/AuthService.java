@@ -68,13 +68,17 @@ public class AuthService {
         user.setNickname(phone);
         userRepository.save(user);
 
-        // 写入users表（user-service）
+        // 写入users表（user-service），强制指定id
         Map<String, Object> userMap = new HashMap<>();
+        userMap.put("id", user.getId()); // 关键：指定id
         userMap.put("username", username);
         userMap.put("phone", phone);
         userMap.put("password", user.getPassword());
         userMap.put("nickname", phone);
         userMap.put("role", user.getRole().name());
+        userMap.put("enabled", user.getEnabled());
+        userMap.put("created_at", user.getCreatedAt());
+        userMap.put("updated_at", user.getUpdatedAt());
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);

@@ -38,6 +38,12 @@ public class UserService {
         user.setNickname(user.getPhone());
         user.setCreatedAt(java.time.LocalDateTime.now());
         user.setUpdatedAt(java.time.LocalDateTime.now());
+        // 如果传入id，校验唯一性
+        if (user.getId() != null) {
+            if (userRepository.existsById(user.getId())) {
+                throw new RuntimeException("用户ID已存在");
+            }
+        }
         return userRepository.save(user);
     }
 
