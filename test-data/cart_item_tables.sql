@@ -7,7 +7,7 @@ DROP TABLE IF EXISTS cart_item;
 -- 创建购物车表
 CREATE TABLE cart_item (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    user_id BIGINT NOT NULL COMMENT '用户ID',
+    user_id INT NOT NULL COMMENT '用户ID',
     product_id BIGINT NOT NULL COMMENT '商品ID',
     product_name VARCHAR(255) NOT NULL COMMENT '商品名称',
     product_image VARCHAR(500) COMMENT '商品图片',

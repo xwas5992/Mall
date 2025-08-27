@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/homepage")
@@ -21,6 +22,51 @@ import java.util.List;
 public class HomepageProductController {
 
     private final HomepageProductService homepageProductService;
+
+    @GetMapping("/health")
+    @Operation(summary = "服务健康检查", description = "检查服务运行状态")
+    public ResponseEntity<Map<String, Object>> health() {
+        Map<String, Object> health = Map.of(
+            "status", "UP",
+            "service", "homepage-product-service",
+            "timestamp", System.currentTimeMillis()
+        );
+        return ResponseEntity.ok(health);
+    }
+
+    @GetMapping("/products/count")
+    @Operation(summary = "获取商品总数", description = "获取系统中商品的总数量")
+    public ResponseEntity<Long> getProductCount() {
+        long totalCount = homepageProductService.getProductRepository().count();
+        return ResponseEntity.ok(totalCount);
+    }
+
+    @GetMapping("/categories")
+    @Operation(summary = "获取商品分类列表", description = "获取系统中所有可用的商品分类")
+    public ResponseEntity<List<String>> getCategories() {
+        List<String> categories = homepageProductService.getProductRepository()
+            .findAllCategories();
+        if (categories.isEmpty()) {
+            categories = List.of("电子产品", "服装", "家居", "图书", "其他");
+        }
+        return ResponseEntity.ok(categories);
+    }
+
+    @GetMapping("/statistics")
+    @Operation(summary = "获取商品统计信息", description = "获取商品的统计信息，包括总数、分类统计等")
+    public ResponseEntity<Map<String, Object>> getStatistics() {
+        long totalProducts = homepageProductService.getProductRepository().count();
+        long featuredProducts = homepageProductService.getProductRepository().countByFeaturedOnHomepageTrue();
+        long activeProducts = homepageProductService.getProductRepository().countByStatus(true);
+        
+        Map<String, Object> statistics = Map.of(
+            "totalProducts", totalProducts,
+            "featuredProducts", featuredProducts,
+            "activeProducts", activeProducts,
+            "timestamp", System.currentTimeMillis()
+        );
+        return ResponseEntity.ok(statistics);
+    }
 
     @GetMapping("/products")
     @Operation(summary = "获取首页展示的商品列表", description = "获取当前在首页展示的所有商品，按排序顺序排列")

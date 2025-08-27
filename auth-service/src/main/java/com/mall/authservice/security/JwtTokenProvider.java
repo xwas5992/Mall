@@ -11,6 +11,10 @@ import org.springframework.stereotype.Component;
 
 import java.security.Key;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+
+import com.mall.authservice.model.User;
 
 @Slf4j
 @Component
@@ -36,6 +40,26 @@ public class JwtTokenProvider {
 
         return Jwts.builder()
                 .setSubject(userDetails.getUsername())
+                .setIssuedAt(now)
+                .setExpiration(expiryDate)
+                .signWith(key)
+                .compact();
+    }
+
+    /**
+     * 生成以用户ID为 subject 的 Token，并携带 userId/username 声明
+     */
+    public String generateTokenForUser(User user) {
+        Date now = new Date();
+        Date expiryDate = new Date(now.getTime() + jwtExpiration);
+
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("userId", user.getId());
+        claims.put("username", user.getUsername());
+
+        return Jwts.builder()
+                .setClaims(claims)
+                .setSubject(String.valueOf(user.getId()))
                 .setIssuedAt(now)
                 .setExpiration(expiryDate)
                 .signWith(key)

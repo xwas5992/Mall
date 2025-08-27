@@ -166,7 +166,7 @@ class AdminPanel {
     async loadDashboard() {
         try {
             // 加载统计数据
-            await this.loadStatistics();
+            await this.loadDashboardStats();
             
             // 加载最近订单
             await this.loadRecentOrders();
@@ -179,25 +179,23 @@ class AdminPanel {
         }
     }
 
-    // 加载统计数据
-    async loadStatistics() {
+    // 加载控制台统计数据
+    async loadDashboardStats() {
         try {
-            const token = localStorage.getItem('adminToken');
-            
-            // 获取用户统计
+            // 用户统计
             const usersResponse = await fetch(`${window.API_CONFIG.auth.baseUrl}/users/count`, {
                 headers: {
-                    'Authorization': `Bearer ${token}`,
+                    'Authorization': `Bearer ${localStorage.getItem('adminToken')}`,
                     ...window.API_FETCH_CONFIG.headers
                 }
             });
             const usersCount = usersResponse.ok ? await usersResponse.json() : 0;
             document.getElementById('totalUsers').textContent = usersCount;
 
-            // 获取商品统计
-            const productsResponse = await fetch(`${window.API_CONFIG.product.baseUrl}/count`, {
+            // 商品统计 - 修正API路径
+            const productsResponse = await fetch(`${window.API_CONFIG.product.homepageUrl}/products/count`, {
                 headers: {
-                    'Authorization': `Bearer ${token}`,
+                    'Authorization': `Bearer ${localStorage.getItem('adminToken')}`,
                     ...window.API_FETCH_CONFIG.headers
                 }
             });
@@ -261,7 +259,7 @@ class AdminPanel {
     async checkSystemStatus() {
         const services = [
             { name: 'auth', url: `${window.API_CONFIG.auth.baseUrl}/health`, element: 'authStatus' },
-            { name: 'product', url: `${window.API_CONFIG.product.baseUrl}/health`, element: 'productStatus' },
+            { name: 'product', url: `${window.API_CONFIG.product.homepageUrl}/health`, element: 'productStatus' },
             { name: 'user', url: `${window.API_CONFIG.user.baseUrl}/health`, element: 'userStatus' }
         ];
 
@@ -291,15 +289,16 @@ class AdminPanel {
     async loadProducts() {
         try {
             const token = localStorage.getItem('adminToken');
-            const response = await fetch(`${window.API_CONFIG.product.baseUrl}?page=0&size=20`, {
+            // 修正API路径，使用与首页商品相同的配置方式
+            const response = await fetch(`${window.API_CONFIG.product.homepageUrl}/products/available`, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     ...window.API_FETCH_CONFIG.headers
                 }
             });
 
-            const data = response.ok ? await response.json() : { content: [] };
-            const products = data.content || [];
+            const data = response.ok ? await response.json() : [];
+            const products = Array.isArray(data) ? data : [];
             const tbody = document.querySelector('#productsTable tbody');
             
             if (products.length === 0) {
@@ -311,12 +310,12 @@ class AdminPanel {
                 <tr>
                     <td>${product.id}</td>
                     <td>
-                        <img src="${product.imageUrl || '../frontend/libs/fontawesome/webfonts/fa-image.svg'}" 
-                             alt="${product.name}" class="product-thumb">
+                        <img src="${product.imageUrl || 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTAiIGhlaWdodD0iNTAiIHZpZXdCb3g9IjAgMCA1MCA1MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjUwIiBoZWlnaHQ9IjUwIiBmaWxsPSIjRjVGNUY1Ii8+CjxwYXRoIGQ9Ik0xNSAxNUgzNVYzNUgxNVYxNVoiIHN0cm9rZT0iI0NDQyIgc3Ryb2tlLXdpZHRoPSIyIi8+CjxwYXRoIGQ9Ik0xNSAxNUwzNSAzNSIgc3Ryb2tlPSIjQ0NDIiBzdHJva2Utd2lkdGg9IjIiLz4KPHBhdGggZD0iTTM1IDE1TDE1IDM1IiBzdHJva2U9IiNDQ0MiIHN0cm9rZS13aWR0aD0iMiIvPgo8L3N2Zz4K'}" 
+                             alt="${product.name}" class="product-thumb" style="width: 50px; height: 50px; object-fit: cover;">
                     </td>
                     <td>${product.name}</td>
                     <td>¥${product.price}</td>
-                    <td>${product.stock}</td>
+                    <td>${product.stock || 0}</td>
                     <td>${product.category || '未分类'}</td>
                     <td>
                         <span class="badge badge-${product.status ? 'success' : 'danger'}">
@@ -456,7 +455,7 @@ class AdminPanel {
     async loadCategories() {
         try {
             const token = localStorage.getItem('adminToken');
-            const response = await fetch(`${window.API_CONFIG.product.baseUrl}/categories`, {
+            const response = await fetch(`${window.API_CONFIG.product.homepageUrl}/categories`, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     ...window.API_FETCH_CONFIG.headers
@@ -499,7 +498,7 @@ class AdminPanel {
     async loadReports() {
         try {
             const token = localStorage.getItem('adminToken');
-            const response = await fetch(`${window.API_CONFIG.product.baseUrl}/statistics`, {
+            const response = await fetch(`${window.API_CONFIG.product.homepageUrl}/statistics`, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     ...window.API_FETCH_CONFIG.headers
@@ -553,7 +552,7 @@ class AdminPanel {
             };
 
             const token = localStorage.getItem('adminToken');
-            const response = await fetch(`${window.API_CONFIG.product.baseUrl}`, {
+            const response = await fetch(`${window.API_CONFIG.product.homepageUrl}/products`, {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${token}`,
@@ -620,7 +619,7 @@ class AdminPanel {
 
         try {
             const token = localStorage.getItem('adminToken');
-            const response = await fetch(`${window.API_CONFIG.product.baseUrl}/${id}`, {
+            const response = await fetch(`${window.API_CONFIG.product.homepageUrl}/products/${id}`, {
                 method: 'DELETE',
                 headers: {
                     'Authorization': `Bearer ${token}`,

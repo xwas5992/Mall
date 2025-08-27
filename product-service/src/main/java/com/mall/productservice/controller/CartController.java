@@ -23,7 +23,7 @@ public class CartController {
     @Autowired
     private HttpServletRequest request;
 
-    private Long getUserId() {
+    private Integer getUserId() {
         try {
             String authHeader = request.getHeader("Authorization");
             log.info("收到Authorization头: {}", authHeader != null ? authHeader.substring(0, Math.min(20, authHeader.length())) + "..." : "null");
@@ -33,7 +33,7 @@ public class CartController {
                 throw new RuntimeException("未登录或token缺失");
             }
             
-            Long userId = jwtUtil.getUserIdFromToken(authHeader);
+            Integer userId = jwtUtil.getUserIdFromToken(authHeader);
             log.info("成功获取用户ID: {}", userId);
             return userId;
             
@@ -46,7 +46,7 @@ public class CartController {
     @GetMapping("/list")
     public List<CartItem> list() {
         try {
-            Long userId = getUserId();
+            Integer userId = getUserId();
             log.info("获取用户 {} 的购物车列表", userId);
             List<CartItem> cartItems = cartService.getCartByUserId(userId);
             log.info("用户 {} 的购物车包含 {} 个商品", userId, cartItems.size());
@@ -60,7 +60,7 @@ public class CartController {
     @PostMapping("/add")
     public CartItem add(@RequestBody CartItem item) {
         try {
-            Long userId = getUserId();
+            Integer userId = getUserId();
             log.info("用户 {} 添加商品到购物车: productId={}, quantity={}", userId, item.getProductId(), item.getQuantity());
             CartItem result = cartService.addToCart(userId, item);
             log.info("成功添加商品到购物车: {}", result.getId());
@@ -74,7 +74,7 @@ public class CartController {
     @PostMapping("/update")
     public Map<String, Object> update(@RequestParam Long productId, @RequestParam Integer quantity) {
         try {
-            Long userId = getUserId();
+            Integer userId = getUserId();
             log.info("用户 {} 更新购物车商品: productId={}, quantity={}", userId, productId, quantity);
             cartService.updateCartItem(userId, productId, quantity);
             
@@ -91,7 +91,7 @@ public class CartController {
     @PostMapping("/remove")
     public Map<String, Object> remove(@RequestParam Long productId) {
         try {
-            Long userId = getUserId();
+            Integer userId = getUserId();
             log.info("用户 {} 删除购物车商品: productId={}", userId, productId);
             cartService.removeCartItem(userId, productId);
             
@@ -108,7 +108,7 @@ public class CartController {
     @PostMapping("/clear")
     public Map<String, Object> clear() {
         try {
-            Long userId = getUserId();
+            Integer userId = getUserId();
             log.info("用户 {} 清空购物车", userId);
             cartService.clearCart(userId);
             

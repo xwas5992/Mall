@@ -94,7 +94,7 @@ public class AuthService {
             new UsernamePasswordAuthenticationToken(username, request.getPassword())
         );
 
-        String token = jwtTokenProvider.generateToken(authentication);
+        String token = jwtTokenProvider.generateTokenForUser(user);
         return new AuthResponse(token, "Bearer", AuthResponse.UserInfo.fromUser(user));
     }
 
@@ -107,7 +107,7 @@ public class AuthService {
             new UsernamePasswordAuthenticationToken(user.getUsername(), request.getPassword())
         );
 
-        String token = jwtTokenProvider.generateToken(authentication);
+        String token = jwtTokenProvider.generateTokenForUser(user);
         return new AuthResponse(token, "Bearer", AuthResponse.UserInfo.fromUser(user));
     }
 
